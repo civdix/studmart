@@ -15,7 +15,10 @@ router.post("/signup", (req, res) => {
       if (err.code == 11000) {
         res.status(404).json({ success: false, msg: err });
       } else {
-        console.log(err);
+        res.status(500).json({
+          success: false,
+          msg: err + "\n This Error was not due to duplicacy",
+        });
       }
     });
 });
@@ -30,7 +33,7 @@ router.get("/login", (req, res) => {
         },
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET_KEY);
-      console.log(data);
+      // console.log("user Found with id:", data.id + "\n");
       res.status(200).json({ success: true, StudentData: data, token });
     })
     .catch((err) => {

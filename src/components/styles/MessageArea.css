@@ -1,0 +1,13 @@
+.message-card {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: "11vh";
+  background: #eae6ff;
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #aedffd;
+  }
+  border-color: #7c4dff;
+}

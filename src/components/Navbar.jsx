@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FaDonate,
-  FaHome,
-  FaHistory,
-  FaPhone,
-  FaPlus,
-  FaBook,
-  FaRegUserCircle,
-  FaSearch,
-  FaUser,
-} from "react-icons/fa";
+import { FaPlus, FaSearch, FaUser } from "react-icons/fa";
 import { SiGoogleanalytics } from "react-icons/si";
 import { IoSettings } from "react-icons/io5";
 import { ImProfile } from "react-icons/im";
@@ -22,6 +12,7 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 // import Notification from "./Notification";
 // import CalcContext from "./calcContext/calcContext";
 import { useAuth } from "../context/context";
+import { FaDoorOpen, FaRightFromBracket } from "react-icons/fa6";
 const NavigationBar = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("token");
@@ -62,19 +53,32 @@ const NavigationBar = () => {
           <Nav>
             {isLoggedIn ? (
               <>
-                <Button
-                  variant="outline-primary"
-                  as={Link}
-                  to="/sell"
-                  className="me-2"
-                >
-                  <FaPlus className="me-1" /> List Item
-                </Button>
+                <button className="me-2 listButton rounded">
+                  <Link
+                    to="/sell"
+                    className="text-decoration-none text-dark"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
+                    <FaPlus className="me-1" /> List Item
+                  </Link>
+                </button>
                 <Nav.Link as={Link} to="/dashboard">
                   <FaUser className="me-1" /> Dashboard
                 </Nav.Link>
-                <Button variant="outline-danger" onClick={handleLogout}>
-                  Logout
+                <Button
+                  variant="outline-danger"
+                  onClick={handleLogout}
+                  style={{
+                    padding: "0 5px",
+                    position: "relative",
+                    right: "-40%",
+                  }}
+                >
+                  <FaRightFromBracket className="me-1" size="30" />
                 </Button>
               </>
             ) : (
@@ -82,7 +86,7 @@ const NavigationBar = () => {
                 <Nav.Link as={Link} to="/login">
                   Login
                 </Nav.Link>
-                <Button variant="primary" as={Link} to="/signup">
+                <Button className="themeButton" as={Link} to="/signup">
                   Sign Up
                 </Button>
               </>

@@ -59,7 +59,7 @@ const AboutPage = () => {
       </nav> */}
 
       {/* Hero Section */}
-      <div className="bg-primary text-white py-5">
+      <div className="themeButton text-white py-5">
         <div className="container py-3">
           <div className="row align-items-center">
             <div className="col-lg-6 mb-4 mb-lg-0">
@@ -120,8 +120,8 @@ const AboutPage = () => {
             <div className="col-md-4">
               <div className="card h-100 border-0 shadow-sm">
                 <div className="card-body p-4 text-center">
-                  <div className="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
-                    <FaUsers className="text-primary" size={30} />
+                  <div className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <FaUsers color="purple" size={30} />
                   </div>
                   <h3 className="h5 fw-bold">Building Community</h3>
                   <p className="card-text">
@@ -134,8 +134,8 @@ const AboutPage = () => {
             <div className="col-md-4">
               <div className="card h-100 border-0 shadow-sm">
                 <div className="card-body p-4 text-center">
-                  <div className="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
-                    <FaRecycle className="text-primary" size={30} />
+                  <div className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <FaRecycle color="purple" size={30} />
                   </div>
                   <h3 className="h5 fw-bold">Environmental Sustainability</h3>
                   <p className="card-text">
@@ -148,8 +148,8 @@ const AboutPage = () => {
             <div className="col-md-4">
               <div className="card h-100 border-0 shadow-sm">
                 <div className="card-body p-4 text-center">
-                  <div className="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
-                    <FaHandshake className="text-primary" size={30} />
+                  <div className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <FaHandshake color="purple" size={30} />
                   </div>
                   <h3 className="h5 fw-bold">Financial Accessibility</h3>
                   <p className="card-text">
@@ -196,9 +196,9 @@ const AboutPage = () => {
             </ul>
           </div>
           <div className="col-lg-6">
-            <div className="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-3 p-4">
+            <div className="d-flex align-items-center justify-content-center themeButtonOpaq bg-opacity-10 rounded-3 p-4">
               <div className="text-center">
-                <FaUniversity className="text-primary mb-3" size={50} />
+                <FaUniversity className=" mb-3" color="purple" size={50} />
                 <h4 className="fw-bold">Campus Verified</h4>
                 <p className="mb-0">
                   Every user is verified using their college email and student
@@ -239,9 +239,9 @@ const AboutPage = () => {
             </ul>
           </div>
           <div className="col-lg-6">
-            <div className="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-3 p-4">
+            <div className="d-flex align-items-center justify-content-center themeButtonOpaq bg-opacity-10 rounded-3 p-4">
               <div className="text-center">
-                <FaShieldAlt className="text-primary mb-3" size={50} />
+                <FaShieldAlt className="mb-3" color="purple" size={50} />
                 <h4 className="fw-bold">Secure Platform</h4>
                 <p className="mb-0">
                   Our secure platform protects your information and facilitates
@@ -256,31 +256,41 @@ const AboutPage = () => {
       {/* Team */}
       <div className="bg-light py-5">
         <div className="container">
-          <h2 className="fw-bold text-center mb-5">Our Team</h2>
+          <h2 className="fw-bold text-center mb-5">Creator</h2>
           <div className="row g-4">
+            {/* 
             <div className="col-md-4">
               <div className="card border-0 shadow-sm text-center h-100">
                 <div className="card-body p-4">
-                  <img
-                    src={require("./images/mitsuha.jpg")}
-                    alt="Team member"
-                    className="rounded-circle mb-3"
-                    style={{ aspectRatio: 1, width: "35%" }}
-                  />
-                  {/* {
-                    <div
-                      className=" mb-3 rounded-circle mx-auto"
+                  <div
+                    className="square-container"
+                    style={{
+                      margin: "0 25%",
+                      width: "50%",
+                      aspectRatio: 1 ,
+                      overflow: "hidden",
+                      borderRadius: "50%",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={require("./images/Simran..jpg")}
+                      alt="Team member"
                       style={{
-                        width: "35%",
-                        aspectRatio: 1,
-                        background: "#FADADD",
+                        position: "absolute",
+                        top: "-100px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        width: "auto",
+                        height: "500px",
+                        objectFit: "cover",
                       }}
-                    ></div>
-                  } */}
-                  <h3 className="h5 fw-bold">NoONe</h3>
-                  <p className="text-muted mb-2">Co-Founder </p>
+                    />
+                  </div>
+                  <h3 className="h5 fw-bold">Simran Sharma</h3>
+                  <p className="text-muted mb-2">Co-Founder</p>
                   <p className="small">
-                    Computer Science graduate with a passion for sustainable
+                    Computer Science Student with a passion for sustainable
                     technology solutions.
                   </p>
                 </div>
@@ -291,34 +301,57 @@ const AboutPage = () => {
               <div className="card border-0 shadow-sm text-center h-100">
                 <div className="card-body p-4">
                   <img
-                    src={require("./images/Shivamdixit.jpeg")}
+                    src={require("./images/logoLakshyaveer.jpg")}
                     alt="Team member"
                     className="rounded-circle mb-3"
-                    width="100"
+                    style={{
+                      aspectRatio: 1,
+                      width: "50%",
+                      backgroundSize: "contain",
+                    }}
                   />
-                  <h3 className="h5 fw-bold">Shivam Dixit</h3>
-                  <p className="text-muted mb-2">Founder & CEO</p>
+                  <h3 className="h5 fw-bold">Team Lakshyaveer</h3>
+                  <p className="text-muted mb-2"></p>
                   <p className="small">
-                    Software engineer focused on creating intuitive user
-                    experiences for educational platforms.
+                    Software engineering Student with a passion for creating
+                    valuble and solution for Society
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="col-md-4">
+            </div> */}
+            <div className="col-md-4 mx-auto">
               <div className="card border-0 shadow-sm text-center h-100">
                 <div className="card-body p-4">
-                  <img
-                    src={require("./images/nightRaid.jpg")}
-                    alt="Team member"
-                    className="rounded-circle mb-3"
-                    style={{ aspectRatio: 1, width: "35%" }}
-                  />
-                  <h3 className="h5 fw-bold">Team Nishachar</h3>
-                  <p className="text-muted mb-2"></p>
+                  <div
+                    className="square-container"
+                    style={{
+                      margin: "0 25%",
+                      width: "50%" /* Set size as needed */,
+                      aspectRatio: 1 /* Makes it a perfect square */,
+                      overflow: "hidden",
+                      borderRadius: "50%",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={require("./images/ShivamDixit.jpg")}
+                      alt="Team member"
+                      style={{
+                        position: "absolute",
+                        top: "-35px",
+                        left: "60%",
+                        transform: "translateX(-50%)",
+                        width: "auto",
+                        height: "500px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                  <h3 className="h5 fw-bold">Shivam Dixit</h3>
+                  <p className="text-muted mb-2">Founder </p>
                   <p className="small">
-                    Software Engineers who thinks nights are more Beautiful than
-                    the day itself
+                    Software engineering Student focused on Creating Solution
+                    for Problems via gained skills
                   </p>
                 </div>
               </div>
@@ -336,10 +369,10 @@ const AboutPage = () => {
               Be part of the movement to make education more affordable and
               sustainable
             </p>
-            <Link to="/signup" className="btn btn-primary btn-lg px-4 me-2">
+            <Link to="/signup" className="btn themeButton btn-lg px-4 me-2">
               Sign Up Now
             </Link>
-            <Link to="/contact" className="btn btn-outline-primary btn-lg px-4">
+            <Link to="/contact" className="btn btn-lg px-4 btn-outline-dark">
               Contact Us
             </Link>
           </div>

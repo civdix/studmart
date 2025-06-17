@@ -16,7 +16,10 @@ import Login from "./components/login";
 import Dashboard from "./components/Dashboard";
 import ProductSearch from "./components/ProductSearch";
 import ProductDetails from "./components/ProductDetails";
+import FutureWorks from "./components/futureworks";
 import { AuthProvider } from "./context/context";
+import LandingPageMain from "./components/LandingPageMain";
+import PrivacyPolicy from "./components/Privacypolicy";
 
 function App() {
   try {
@@ -34,7 +37,7 @@ function App() {
             element: !localStorage.getItem("token") ? (
               <HomePage />
             ) : (
-              <Dashboard />
+              <LandingPageMain />
             ),
           },
           {
@@ -68,6 +71,14 @@ function App() {
           {
             path: "/product/:id",
             element: <ProductDetails />,
+          },
+          {
+            path: "/futureWorks",
+            element: <FutureWorks />,
+          },
+          {
+            path: "/PrivacyPolicy",
+            element: <PrivacyPolicy />,
           },
         ],
       },

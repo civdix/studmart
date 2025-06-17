@@ -28,11 +28,11 @@ const HomePage = () => {
             <div className="d-grid gap-2 d-md-flex justify-content-md-center">
               <Link
                 to="/signup"
-                className="btn btn-primary btn-lg px-4 me-md-2"
+                className="btn themeButton btn-lg px-4 me-md-2"
               >
                 Join StudMart
               </Link>
-              <Link to="/about" className="btn btn-outline-primary btn-lg px-4">
+              <Link to="/about" className="btn purpleOutline btn-lg px-4">
                 Learn More
               </Link>
             </div>
@@ -48,8 +48,8 @@ const HomePage = () => {
             <div className="col-md-4">
               <div className="card h-100 shadow-sm border-0 hover-shadow">
                 <div className="card-body text-center p-4">
-                  <div className="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
-                    <FaDollarSign className="text-primary" size={30} />
+                  <div className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <FaDollarSign color="#343434" size={30} />
                   </div>
                   <h3 className="card-title h5 fw-bold">Save Money</h3>
                   <p className="card-text">
@@ -62,8 +62,8 @@ const HomePage = () => {
             <div className="col-md-4">
               <div className="card h-100 shadow-sm border-0 hover-shadow">
                 <div className="card-body text-center p-4">
-                  <div className="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
-                    <FaRecycle className="text-primary" size={30} />
+                  <div className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <FaRecycle color="#343434" size={30} />
                   </div>
                   <h3 className="card-title h5 fw-bold">Reduce Waste</h3>
                   <p className="card-text">
@@ -76,8 +76,8 @@ const HomePage = () => {
             <div className="col-md-4">
               <div className="card h-100 shadow-sm border-0 hover-shadow">
                 <div className="card-body text-center p-4">
-                  <div className="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
-                    <FaLaptop className="text-primary" size={30} />
+                  <div className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <FaLaptop color="#343434" size={30} />
                   </div>
                   <h3 className="card-title h5 fw-bold">
                     Access Essential Tools
@@ -102,7 +102,7 @@ const HomePage = () => {
               Join thousands of students who are already saving money and
               reducing waste
             </p>
-            <Link to="/signup" className="btn btn-primary btn-lg px-4">
+            <Link to="/signup" className="btn themeButton btn-lg px-4">
               Get Started Today
             </Link>
           </div>

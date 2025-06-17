@@ -20,7 +20,8 @@ const auth = async (req, res, next) => {
 
     req.token = token;
     req.user = user;
-    console.log("req.body", req.user);
+    req.body.userId = user._id;
+    console.log("user = ", req.user.name);
 
     next();
   } catch (error) {

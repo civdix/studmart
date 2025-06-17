@@ -1,0 +1,68 @@
+h2 {
+  margin: 2vw 0 0vw 2%;
+}
+.Slider {
+  margin: 0 5%;
+}
+
+.BestForNewbie {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: auto;
+}
+
+.BestForNewbie {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  overflow: scroll; /* Enable scrolling */
+
+  /* For WebKit-based browsers like Chrome, Safari */
+}
+.BestForNewbie::-webkit-scrollbar {
+  display: none;
+}
+.productCard {
+  min-width: 20vw;
+  height: 20vw;
+  border-radius: 10px;
+  margin: 1%;
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5%;
+  cursor: pointer;
+}
+
+.arrow {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    rgba(186, 42, 255, 0.7),
+    rgba(95, 0, 185, 0.9)
+  );
+  width: fit-content;
+  color: white;
+  border-width: 0px;
+  border-radius: 5px;
+  box-shadow: 0 0px 100px 1px rgba(199, 23, 235, 0.8);
+  padding: 1% 1%;
+  height: 25%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.arrow-right {
+  right: 1%;
+  top: 40%;
+}
+.arrow-left {
+  left: 1%;
+  top: 40%;
+}

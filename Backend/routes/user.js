@@ -5,6 +5,7 @@ const auth = require("../middlewares/auth");
 const multer = require("multer");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const { getSignedImages, setSignedImages } = require("../middlewares/redis.js");
 require("dotenv").config();
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -76,22 +77,58 @@ router.post("/logout", auth, async (req, res) => {
 });
 
 // Get user profile or Data
-router.get("/profile/me", auth, async (req, res) => {
+router.get("/profile/me", auth, getSignedImages, async (req, res) => {
   const user = req.user;
   if (!user) {
     return res.status(404).json({ success: false, error: "User not found" });
   }
-  res.status(201).json({ success: true, user });
+  // Recieving right Object Id
+  if (!req.imageUrlFromRedisMiddleware) {
+    const response = await fetch("http://localhost:5000/api/s3/getImage", {
+      method: "POST", // changed to POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageUrls: [user.profilePicture],
+        userId: user._id || null, // Ensure productId is passed if available
+      }),
+    });
+    const { success, imageUrl } = await response.json();
+    if (!success) {
+      return res.status(500).json({
+        success: false,
+        error: "Failed to fetch profile picture",
+      });
+    }
+    setSignedImages(user._id, imageUrl, 5000); // Store the signed URL in Redis with a 1-hour expiry
+    user.profilePicture = imageUrl;
+    res.status(201).json({ success: true, user });
+  } else {
+    user.profilePicture = req.imageUrlFromRedisMiddleware;
+    res.status(201).json({ success: true, user });
+  }
 });
 
 // Update user profile
+//  have to make cache the image if changes the profile photot as the
+//  reddis will point to old image still
+//  on changing, i should delete old image
 router.patch(
   "/profile",
   auth,
   upload.single("profilePicture"),
   async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ["name", "email", "password", "college", "phone"];
+
+    const allowedUpdates = [
+      "name",
+      "email",
+      "password",
+      "college",
+      "phone",
+      "profilePicture",
+    ];
     const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
     );

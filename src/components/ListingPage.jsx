@@ -53,6 +53,8 @@ const ListItemPage = () => {
       ...itemData,
       images: [...itemData.images, ...files],
     });
+
+    console.log("Files", files);
   };
 
   // Remove image from preview and state
@@ -104,6 +106,7 @@ const ListItemPage = () => {
     // Append images
     itemData.images.forEach((image, index) => {
       formData.append(`image${index}`, image);
+      console.log("Image", image);
     });
 
     try {
@@ -124,7 +127,7 @@ const ListItemPage = () => {
           },
           body: JSON.stringify({
             ...itemData,
-            images: [jsonResponseImage.url],
+            images: [jsonResponseImage.AWSName],
           }),
         }
       );
@@ -147,7 +150,6 @@ const ListItemPage = () => {
 
   return (
     <>
-      <Navbar />
       <Container className="py-4">
         {/* <Button
           onClick={() => {
@@ -168,7 +170,7 @@ const ListItemPage = () => {
         <Row>
           <Col lg={8} className="mx-auto">
             <Card className="shadow-sm">
-              <Card.Header className="bg-primary text-white">
+              <Card.Header className="themeButton text-white">
                 <h1 className="h3 mb-0">List an Item on Studmart</h1>
               </Card.Header>
               <Card.Body>
@@ -358,14 +360,13 @@ const ListItemPage = () => {
 
                   {/* Submission */}
                   <div className="d-grid gap-2">
-                    <Button
-                      variant="primary"
+                    <button
+                      className="btn themeButton btn-lg"
                       type="submit"
-                      size="lg"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Posting..." : "Post Item"}
-                    </Button>
+                    </button>
                   </div>
                 </Form>
               </Card.Body>

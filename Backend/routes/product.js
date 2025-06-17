@@ -30,7 +30,7 @@ router.post(
         // images: req.files.map((file) => file.path),
       });
       await product.save();
-      console.log("product", product);
+      // console.log("product created successfully\n");
       res.status(201).json(product);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -47,10 +47,32 @@ router.get("/getMyListing", auth, async (req, res) => {
     if (!products) {
       return res.status(404).json({ error: "No products found" });
     }
-    console.log("products", products);
+    // console.log("Products found");
+    await Promise.all(
+      products.map(async (product) => {
+        const response = await fetch("http://localhost:5000/api/s3/getImage/", {
+          method: "POST", // changed to POST
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imageUrls: product.images,
+            productId: product._id,
+          }), // Pass product ID for S3 image retrieval
+        });
+
+        const { success, imageUrl } = await response.json();
+        if (success) {
+          product.images = [imageUrl];
+        }
+      })
+    );
+
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      "This is from product /getMyListing API for error": error.message,
+    });
   }
 });
 
@@ -65,7 +87,8 @@ router.get("/", async (req, res) => {
     }
 
     if (category && category !== "all") {
-      query.category = category;
+      query.category =
+        category[0].toUpperCase() + category.slice(1).toLowerCase();
     }
 
     if (priceRange && priceRange !== "all") {
@@ -91,7 +114,28 @@ router.get("/", async (req, res) => {
     const products = await Product.find(query)
       .sort(sort)
       .populate("seller", "name rating");
-    res.json(products);
+
+    await Promise.all(
+      products.map(async (product) => {
+        const response = await fetch("http://localhost:5000/api/s3/getImage/", {
+          method: "POST", // changed to POST
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imageUrls: product.images,
+            productId: product._id, // Pass product ID for S3 image retrieval
+          }),
+        });
+
+        const { success, imageUrl } = await response.json();
+        if (success) {
+          product.images = [imageUrl];
+        }
+      })
+    );
+
+    res.json({ products, "url is ": req.url });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -112,6 +156,31 @@ router.get("/:id", async (req, res) => {
     // Increment view count
     product.views += 1;
     await product.save();
+
+    // AWS IMage will be generated
+    const awsSignedUrlRegex =
+      /amazonaws\.com\/[a-zA-Z0-9_-]+\.(png|jpg|jpeg|webp|gif)\?X-Amz-Algorithm=AWS4-HMAC-SHA256.*X-Amz-Signature=/;
+
+    // if (awsSignedUrlRegex.test(product.images[0])) {
+    //   // Nothing to do
+    // } else {
+    const response = await fetch("http://localhost:5000/api/s3/getImage/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageUrls: product.images,
+        productId: product._id,
+      }),
+    });
+
+    const { success, imageUrl } = await response.json();
+    if (success) {
+      product.images = [imageUrl];
+    }
+
+    // }
 
     res.json(product);
   } catch (error) {
@@ -168,6 +237,21 @@ router.patch("/:id", auth, upload.array("images", 5), async (req, res) => {
 // Delete product
 router.delete("/:id", auth, async (req, res) => {
   try {
+    // Implelement S3 delete image API here
+    const response = await fetch(
+      `http://localhost:5000/api/s3/deleteImage/${req.params.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const { success, message } = await response.json();
+    if (!success) {
+      return res.status(500).json({ success: false, message });
+    }
+
     const product = await Product.findOneAndDelete({
       _id: req.params.id,
       seller: req.user._id,
@@ -179,7 +263,14 @@ router.delete("/:id", auth, async (req, res) => {
         .json({ success: false, error: "Product not found" });
     }
 
-    res.json({ success: true, product });
+    res.json({
+      success: true,
+      product,
+      message:
+        "Database Response: The Post deleted Successfully \n AWS Response:" +
+        message,
+    });
+    console.log(message);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

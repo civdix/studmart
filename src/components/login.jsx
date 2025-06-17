@@ -44,22 +44,12 @@ const LoginPage = () => {
 
   return (
     <div>
-      {/* Navigation */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand d-flex align-items-center" to="/">
-            <FaBook className="text-primary me-2" size={24} />
-            <span className="fw-bold text-primary">StudMart</span>
-          </Link>
-        </div>
-      </nav>
-
       {/* Login Form */}
-      <div className="container py-5">
+      <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-6 col-lg-5">
             <div className="card shadow-sm border-0">
-              <div className="card-body p-4 p-md-5">
+              <div className="card-body">
                 <div className="text-center mb-4">
                   <h2 className="fw-bold">Welcome Back!</h2>
                   <p className="text-muted">
@@ -74,7 +64,7 @@ const LoginPage = () => {
                     </label>
                     <div className="input-group">
                       <span className="input-group-text bg-light">
-                        <FaEnvelope />
+                        <FaEnvelope color="purple" />
                       </span>
                       <input
                         type="email"
@@ -99,6 +89,7 @@ const LoginPage = () => {
                       </label>
                       <Link
                         to="/forgot-password"
+                        style={{ color: "purple" }}
                         className="text-decoration-none small"
                       >
                         Forgot password?
@@ -106,7 +97,7 @@ const LoginPage = () => {
                     </div>
                     <div className="input-group">
                       <span className="input-group-text bg-light">
-                        <FaLock />
+                        <FaLock color="purple" />
                       </span>
                       <input
                         type="password"
@@ -124,7 +115,8 @@ const LoginPage = () => {
                   <div className="mb-3 form-check">
                     <input
                       type="checkbox"
-                      className="form-check-input"
+                      className="form-check-input "
+                      color="purple"
                       id="rememberMe"
                     />
                     <label className="form-check-label" htmlFor="rememberMe">
@@ -133,7 +125,7 @@ const LoginPage = () => {
                   </div>
 
                   <div className="d-grid mb-4">
-                    <button type="submit" className="btn btn-primary btn-lg">
+                    <button type="submit" className="btn themeButton btn-lg">
                       Log In
                     </button>
                   </div>
@@ -143,6 +135,7 @@ const LoginPage = () => {
                       Don't have an account?{" "}
                       <Link
                         to="/signup"
+                        style={{ color: "purple" }}
                         className="text-decoration-none fw-medium"
                       >
                         Sign up

@@ -36,3 +36,150 @@
     transform: rotate(360deg);
   }
 }
+.listButton {
+  background-color: #ffffff;
+  color: #282c34;
+  border: 1px solid purple;
+  color: purple;
+  overflow: hidden;
+}
+
+.themeButton,
+.listButton:hover {
+  background: linear-gradient(
+    to right,
+    rgba(186, 42, 255, 0.7),
+    rgba(95, 0, 185, 0.9)
+  ) !important ;
+  border: none !important ;
+  color: white !important;
+}
+.themeButton:hover {
+  border: 1px solid purple !important ;
+  color: purple;
+  background-color: white !important;
+}
+.themeButtonOpaq {
+  background: linear-gradient(
+    to right,
+    rgba(186, 42, 255, 0.3),
+    rgba(95, 0, 185, 0.5)
+  ) !important ;
+}
+
+.purpleOutline {
+  border: 2px solid rgb(221, 101, 221) !important ;
+  color: rgb(206, 79, 206);
+
+  /* box-shadow: 0 0px 100px 1px rgba(199, 23, 235, 0.8) !important ; */
+}
+.purpleOutline:hover {
+  background: linear-gradient(
+    to right,
+    rgba(186, 42, 255, 0.7),
+    rgba(95, 0, 185, 0.9)
+  ) !important ;
+  border: 1px solid black;
+}
+.instagram {
+  border-radius: 6px;
+  padding: 0% 1%;
+  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
+}
+
+.modal1 {
+  position: absolute;
+  border-radius: 15px;
+  background: linear-gradient(
+    to right,
+    rgba(186, 42, 255, 0.7),
+    rgba(95, 0, 185, 0.9)
+  );
+  overflow: auto;
+  z-index: 100;
+  color: white;
+  width: 50vw;
+  height: "fit-content";
+  padding: 1% 1% 3% 1%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  --webkit-overflow-scrolling: touch;
+  --webkit-scrollbar: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  /* scrollbar-width: 0; */
+}
+.modal::--webkit-scrollbar {
+  display: none;
+}
+.modal1 .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+.modal1 .close:hover {
+  background-color: #f44336;
+  color: white;
+}
+.modal1 .close:active {
+  background-color: #f44336;
+  color: white;
+}
+.modal1 .close:focus {
+  outline: none;
+}
+.modal1 .close:focus-visible {
+  outline: 2px solid #f44336;
+}
+
+.modal1 form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0 0 0 10%;
+}
+.modal1 form label {
+  display: block;
+  font-size: x-large;
+}
+.modal1 form input {
+  width: 80%;
+  padding: 1%;
+  margin: 1% 0;
+  border-radius: 5px;
+  border: none;
+}
+.modal1 form input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  margin: 4% 0 0 0;
+}
+
+.form-check-input[type="checkbox"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Checkmark when checked */
+.form-check-input[type="checkbox"]:checked {
+  background-color: rgb(211, 59, 211); /* Green background */
+  box-shadow: 0 0 10px purple;
+  width: 15px;
+  height: 15px;
+  border: none;
+}
+.form-check-input:focus {
+  outline: none;
+  border-color: rgb(131, 33, 131) !important;
+  box-shadow: 0 0 15px purple !important;
+}
+/* Create a custom checkmark using ::after */

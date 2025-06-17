@@ -91,22 +91,12 @@ const SignupPage = () => {
 
   return (
     <div>
-      {/* Navigation */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand d-flex align-items-center" to="/">
-            <FaBook className="text-primary me-2" size={24} />
-            <span className="fw-bold text-primary">StudMart</span>
-          </Link>
-        </div>
-      </nav>
-
       {/* Signup Form */}
-      <div className="container py-5">
+      <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-8 col-lg-7">
             <div className="card shadow-sm border-0">
-              <div className="card-body p-4 p-md-5">
+              <div className="card-body ">
                 <div className="text-center mb-4">
                   <h2 className="fw-bold">Create Your StudMart Account</h2>
                   <p className="text-muted">
@@ -367,7 +357,7 @@ const SignupPage = () => {
                     <div className="col-12">
                       <div className="form-check">
                         <input
-                          className="form-check-input"
+                          className="form-check-input "
                           type="checkbox"
                           id="termsCheck"
                           required
@@ -377,11 +367,19 @@ const SignupPage = () => {
                           htmlFor="termsCheck"
                         >
                           I agree to the{" "}
-                          <Link to="/terms" className="text-decoration-none">
+                          <Link
+                            to="/terms"
+                            style={{ color: "purple" }}
+                            className="text-decoration-none"
+                          >
                             Terms of Service
                           </Link>{" "}
                           and{" "}
-                          <Link to="/privacy" className="text-decoration-none">
+                          <Link
+                            to="/privacy"
+                            style={{ color: "purple" }}
+                            className="text-decoration-none"
+                          >
                             Privacy Policy
                           </Link>
                         </label>
@@ -393,7 +391,7 @@ const SignupPage = () => {
                       <div className="d-grid">
                         <button
                           type="submit"
-                          className="btn btn-primary btn-lg"
+                          className="btn btn-primary btn-lg themeButton"
                         >
                           Create Account
                         </button>
@@ -406,7 +404,8 @@ const SignupPage = () => {
                         Already have an account?{" "}
                         <Link
                           to="/login"
-                          className="text-decoration-none fw-medium"
+                          style={{ color: "purple" }}
+                          className="text-decoration-none fw-medium "
                         >
                           Log In
                         </Link>

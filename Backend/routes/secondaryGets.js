@@ -1,13 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-
-console.log("SecondaryGets router initialized");
+const fs = require("fs");
+const path = require("path");
 
 // Test endpoint
 router.get("/test", (req, res) => {
-  console.log("Test endpoint hit");
   res.json({ message: "API is working!" });
 });
 
@@ -15,39 +12,37 @@ let collegejson = [];
 
 try {
   // Read the colleges.json file
-  const collegesPath = path.join(__dirname, 'colleges.json');
-  console.log('Attempting to read file at:', collegesPath);
-  
+  const collegesPath = path.join(__dirname, "colleges.json");
+
   if (fs.existsSync(collegesPath)) {
-    console.log('File exists, reading...');
-    const fileContent = fs.readFileSync(collegesPath, 'utf8');
+    const fileContent = fs.readFileSync(collegesPath, "utf8");
     collegejson = JSON.parse(fileContent);
-    console.log('Successfully loaded colleges.json. Number of colleges:', collegejson.length);
+    // console.log(
+    //   "Successfully loaded colleges.json. Number of colleges:",
+    //   collegejson.length
+    // );
   } else {
-    console.error('colleges.json file not found at:', collegesPath);
+    console.error("colleges.json file not found at:", collegesPath);
   }
 } catch (error) {
-  console.error('Error loading colleges.json:', error);
+  console.error("Error loading colleges.json:", error);
 }
 
 // College search endpoint
 router.get("/getCollege", (req, res) => {
   try {
-    console.log("In the getCollege request");
-    console.log("Request URL:", req.url);
-    console.log("Query parameters:", req.query);
-    
     // Get the college name from query parameters
     const { college } = req.query;
-    console.log("Searching for college:", college);
 
     if (!college) {
       console.log("No college name provided in query");
-      return res.status(400).json({ success: false, message: "College name is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "College name is required" });
     }
 
     searchCollege(college, (foundColleges) => {
-      console.log("Found colleges:", foundColleges.length);
+      // console.log("Found colleges:", foundColleges.length);
       // Check if we found any colleges
       if (foundColleges.length > 0) {
         res.status(200).json({ success: true, foundColleges });
@@ -80,11 +75,5 @@ const searchCollege = (name, callback) => {
 };
 
 // Log all routes
-console.log("Available routes in secondaryGets:");
-router.stack.forEach((r) => {
-  if (r.route && r.route.path) {
-    console.log(`- ${r.route.path}`);
-  }
-});
 
 module.exports = router;

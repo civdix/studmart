@@ -8,7 +8,12 @@ import {
   FaMapMarkerAlt,
   FaUser,
   FaPaperPlane,
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
 } from "react-icons/fa";
+import { FaX, FaXTwitter } from "react-icons/fa6";
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -76,58 +81,13 @@ const ContactPage = () => {
 
   return (
     <div>
-      {/* Navigation */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand d-flex align-items-center" to="/">
-            <FaBook className="text-primary me-2" size={24} />
-            <span className="fw-bold text-primary">StudMart</span>
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <Link className="nav-link" to="/about">
-                  About
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/how-it-works">
-                  How It Works
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link active" to="/contact">
-                  Contact
-                </Link>
-              </li>
-            </ul>
-            <div className="d-flex">
-              <Link to="/login" className="btn btn-outline-primary me-2">
-                Log In
-              </Link>
-              <Link to="/signup" className="btn btn-primary">
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
-      <div className="bg-primary text-white py-5">
+      <div className="themeButton text-white py-5">
         <div className="container py-3">
           <div className="row justify-content-center text-center">
             <div className="col-lg-8">
               <h1 className="display-4 fw-bold">Contact Us</h1>
-              <p className="lead">
+              <p className="lead text-white">
                 Have questions or feedback? We'd love to hear from you!
               </p>
             </div>
@@ -151,10 +111,10 @@ const ContactPage = () => {
                 <a
                   target="_blank"
                   href="mailto:dixitshivam249@gmail.com"
-                  className="rounded-circle bg-primary bg-opacity-10 p-3 d-flex align-items-center justify-content-center"
+                  className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-flex align-items-center justify-content-center"
                   style={{ width: "50px", height: "50px" }}
                 >
-                  <FaEnvelope className="text-primary" />
+                  <FaEnvelope color="purple" />
                 </a>
               </div>
               <div className="ms-3">
@@ -166,11 +126,11 @@ const ContactPage = () => {
             <div className="d-flex mb-4">
               <div className="flex-shrink-0">
                 <div
-                  className="rounded-circle bg-primary bg-opacity-10 p-3 d-flex align-items-center justify-content-center"
+                  className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-flex align-items-center justify-content-center"
                   style={{ width: "50px", height: "50px" }}
                 >
                   <a href="tel:+919720965985" target="_blank">
-                    <FaPhone className="text-primary" />
+                    <FaPhone color="purple" />
                   </a>
                 </div>
               </div>
@@ -185,10 +145,10 @@ const ContactPage = () => {
                 <a
                   target="_blank"
                   href="https://maps.app.goo.gl/ASshRVAoPEVCjjhAA"
-                  className="rounded-circle bg-primary bg-opacity-10 p-3 d-flex align-items-center justify-content-center"
+                  className="rounded-circle themeButtonOpaq bg-opacity-10 p-3 d-flex align-items-center justify-content-center"
                   style={{ width: "50px", height: "50px" }}
                 >
-                  <FaMapMarkerAlt className="text-primary" />
+                  <FaMapMarkerAlt color="purple" />
                 </a>
               </div>
               <div className="ms-3">
@@ -202,29 +162,29 @@ const ContactPage = () => {
 
             <h4 className="fw-bold mt-5 mb-3">Follow Us</h4>
             <div className="d-flex gap-3">
-              <a
-                href="#"
-                className="btn btn-outline-primary rounded-circle p-2"
-              >
-                <i className="fab fa-facebook-f"></i>
+              <a href="#">
+                <FaFacebook color="blue" size={25} style={{ margin: 0 }} />
               </a>
               <a
                 href="#"
-                className="btn btn-outline-primary rounded-circle p-2"
+                style={{
+                  backgroundColor: "black",
+                  borderRadius: "6px",
+                  width: "25px",
+                }}
               >
-                <i className="fab fa-twitter"></i>
+                {/* <i className="fab fa-twitter"></i> */}
+                <FaXTwitter
+                  color="white"
+                  size={20}
+                  style={{ margin: "0 2.5px " }}
+                />
               </a>
-              <a
-                href="#"
-                className="btn btn-outline-primary rounded-circle p-2"
-              >
-                <i className="fab fa-instagram"></i>
+              <a href="#" className="instagram">
+                <FaInstagram size={20} color="white" style={{ margin: 0 }} />
               </a>
-              <a
-                href="#"
-                className="btn btn-outline-primary rounded-circle p-2"
-              >
-                <i className="fab fa-linkedin-in"></i>
+              <a href="#">
+                <FaLinkedin color="#0A66C2" size={25} style={{ margin: 0 }} />
               </a>
             </div>
           </div>
@@ -233,7 +193,7 @@ const ContactPage = () => {
           <div className="col-lg-8">
             <div className="card border-0 shadow-sm">
               <div className="card-body p-4 p-md-5">
-                <h2 className="fw-bold mb-4">Send Us a Message</h2>
+                <h2 className="fw-bold mb-4 ">Send Us a Message</h2>
 
                 {status.success && (
                   <div
@@ -356,7 +316,7 @@ const ContactPage = () => {
                     <div className="col-12 mt-4">
                       <button
                         type="submit"
-                        className="btn btn-primary btn-lg d-flex align-items-center gap-2"
+                        className="btn themeButtonOpaq btn-lg d-flex align-items-center gap-2"
                         disabled={status.submitting}
                       >
                         {status.submitting ? (
@@ -407,7 +367,7 @@ const ContactPage = () => {
                       }}
                       className={
                         faq == 1
-                          ? "accordion-button"
+                          ? "accordion-button themeButtonOpaq"
                           : "accordion-button collapsed"
                       }
                       type="button"
@@ -448,7 +408,7 @@ const ContactPage = () => {
                       }}
                       className={
                         faq == 2
-                          ? "accordion-button"
+                          ? "accordion-button themeButtonOpaq"
                           : "accordion-button collapsed"
                       }
                       type="button"
@@ -488,7 +448,7 @@ const ContactPage = () => {
                       }}
                       className={
                         faq == 3
-                          ? "accordion-button"
+                          ? "accordion-button themeButtonOpaq"
                           : "accordion-button collapsed"
                       }
                       type="button"

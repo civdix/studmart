@@ -10,21 +10,26 @@ import {
 } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart, FaTrash } from "react-icons/fa";
-import Chat from "./Chat";
+import Chat from "./subcomponent/Chat";
 import { FaMessage } from "react-icons/fa6";
 import { useAuth } from "../context/context";
 import Loading from "./subcomponent/Loading";
+import "./styles/productDetails.css";
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [showChat, setShowChat] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [loadingData, setLoadingData] = useState({
-    customMsg: "Loading the Product Details",
-    customLoading: "Btw You're looking Beautiful today",
-  });
-  const { currentUser, loading, setLoading } = useAuth();
+
+  const {
+    currentUser,
+    loading,
+    setLoading,
+    deleteProduct,
+    setLoadingData,
+    loadingData,
+  } = useAuth();
   useEffect(() => {
     fetchProductDetails();
     checkIfFavorite();
@@ -84,32 +89,6 @@ const ProductDetails = () => {
     }
   };
 
-  const deleteProduct = async (productId) => {
-    setLoading(true);
-    let previousLoading = loadingData;
-    setLoadingData({
-      customMsg: "Deleting the Product",
-      customLoading: "The Item will be permanently deleted",
-    });
-    const response = await fetch(
-      `http://localhost:5000/api/products/${productId}`,
-      {
-        method: "DELETE",
-        headers: {
-          studenttoken: localStorage.getItem("token"),
-        },
-      }
-    );
-    const data = await response.json();
-    if (data.success) {
-      navigate("/dashboard");
-    } else {
-      alert("Error deleting product:", data.error);
-    }
-    setLoading(false);
-    setLoadingData(previousLoading);
-  };
-
   if (!product) {
     return <Loading />;
   }
@@ -122,12 +101,13 @@ const ProductDetails = () => {
   ) : (
     <Container className="py-5">
       <Row>
-        <Col md={6}>
-          <div className="product-images">
+        <Col md={6} style={{ alignContent: "center" }}>
+          <div className="product-images ">
             <img
               src={product.images[0]}
               alt={product.title || "Product Image Cannot be loaded"}
-              className="img-fluid rounded main-image mb-3"
+              className="img-fluid rounded main-image mb-3 my-auto"
+              width="100%"
             />
             <Row>
               {product.images.slice(1).map((image, index) => (
@@ -151,14 +131,14 @@ const ProductDetails = () => {
                   {isFavorite ? (
                     <FaHeart className="text-danger" size={24} />
                   ) : (
-                    <FaRegHeart size={24} />
+                    <FaRegHeart color="purple" size={24} />
                   )}
                 </Button>
               </div>
-              <h3 className="text-primary mb-4">₹{product.price}</h3>
-              <Badge bg="secondary" className="mb-3">
-                {product.category}
-              </Badge>
+              <h3 className=" mb-4" style={{ color: "purple" }}>
+                ₹{product.price}
+              </h3>
+              <Badge className="themeButton mb-3">{product.category}</Badge>
               <p className="mb-4">{product.description}</p>
               <div className="mb-4">
                 <h5>Condition</h5>
@@ -177,21 +157,29 @@ const ProductDetails = () => {
                   variant="danger"
                   size="lg"
                   className="w-100 mb-3"
-                  onClick={() => deleteProduct(product._id)}
+                  onClick={() => {
+                    deleteProduct(product._id).then((data) => {
+                      if (data.success) {
+                        navigate("/dashboard");
+                      } else {
+                        alert("Error deleting product:", data.error);
+                      }
+                    });
+                  }}
                 >
                   <FaTrash className="me-2" />
                   Delete the Product
                 </Button>
               ) : (
-                <Button
-                  variant="primary"
-                  size="lg"
-                  className="w-100 mb-3"
+                <button
+                  // variant="primary"
+
+                  className="w-100 mb-3 btn btn-lg themeButton"
                   onClick={() => setShowChat(true)}
                 >
                   <FaMessage className="me-2" />
-                  Chat with the Seller
-                </Button>
+                  Chat with the Sellerf
+                </button>
               )}
             </Card.Body>
           </Card>
@@ -208,7 +196,12 @@ const ProductDetails = () => {
           <Modal.Title>Chat with Seller</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Chat recipientId={product.seller._id} productId={product._id} />
+          <Chat
+            recipientId={product.seller._id}
+            productId={product._id}
+            productData={product}
+            recipientInfo={product.seller}
+          />
         </Modal.Body>
       </Modal>
     </Container>
