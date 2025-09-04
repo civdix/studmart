@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaBook, FaEnvelope, FaLock } from "react-icons/fa";
 import { useAuth } from "../context/context";
-import dotenv from "dotenv";
-dotenv.config();
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

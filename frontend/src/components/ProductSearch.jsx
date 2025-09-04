@@ -8,8 +8,7 @@ import {
   Button,
   InputGroup,
 } from "react-bootstrap";
-import dotenv from "dotenv";
-dotenv.config();
+
 import { FaSearch, FaFilter } from "react-icons/fa";
 import "./styles/products.css";
 

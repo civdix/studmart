@@ -10,8 +10,7 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import dotenv from "dotenv";
-dotenv.config();
+
 import Navbar from "./Navbar";
 const ListItemPage = () => {
   const navigate = useNavigate();

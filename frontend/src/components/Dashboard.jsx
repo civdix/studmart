@@ -7,8 +7,7 @@ import { FaMessage, FaPerson, FaShop } from "react-icons/fa6";
 import { FaEdit, FaLink, FaTrash, FaUserCheck } from "react-icons/fa";
 import EditProfile from "./subcomponent/EditProfile.jsx";
 import "./styles/Dashboard.css"; // Assuming you have a CSS file for styling
-import dotenv from "dotenv";
-dotenv.config();
+
 const Dashboard = () => {
   const [userListings, setUserListings] = useState([]);
   const [transactions, setTransactions] = useState([]);

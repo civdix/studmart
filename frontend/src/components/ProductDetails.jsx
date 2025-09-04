@@ -15,8 +15,7 @@ import { FaMessage } from "react-icons/fa6";
 import { useAuth } from "../context/context";
 import Loading from "./subcomponent/Loading";
 import "./styles/productDetails.css";
-import dotenv from "dotenv";
-dotenv.config();
+
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();

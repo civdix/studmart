@@ -10,8 +10,6 @@ import {
   FaLock,
   FaUniversity,
 } from "react-icons/fa";
-import dotenv from "dotenv";
-dotenv.config();
 
 const SignupPage = () => {
   const navigate = useNavigate();

@@ -4,8 +4,7 @@ import { FaLink, FaPaperPlane } from "react-icons/fa";
 
 import "../styles/Chat.css"; // Import your CSS file for styling
 import { useNavigate } from "react-router-dom";
-import dotenv from "dotenv";
-dotenv.config();
+
 // import { useAuth } from "../context/context";
 const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
   const itemDeleted = productData ? false : true;

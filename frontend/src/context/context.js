@@ -2,8 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 // Create context
 const AuthContext = createContext();
-import dotenv from "dotenv";
-dotenv.config();
+
 // Provider component
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);

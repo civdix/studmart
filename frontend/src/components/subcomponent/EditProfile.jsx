@@ -3,8 +3,7 @@ import { useAuth } from "../../context/context";
 import { FaCross } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import Loading from "./Loading";
-import dotenv from "dotenv";
-dotenv.config();
+
 function EditProfile({ user, setShow }) {
   const [preview, setPreview] = useState(null);
   const [userData, setUserData] = useState({});
