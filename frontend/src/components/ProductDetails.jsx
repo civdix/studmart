@@ -39,7 +39,7 @@ const ProductDetails = () => {
   const fetchProductDetails = async () => {
     try {
       const response = await fetch(
-        `https://${process.env.backend_url}/api/products/${id}`
+        `${process.env.REACT_APP_backend_url}/api/products/${id}`
       );
       const data = await response.json();
       console.log("Fetched data is ", data);
@@ -52,7 +52,7 @@ const ProductDetails = () => {
   const checkIfFavorite = async () => {
     try {
       const response = await fetch(
-        `https://${process.env.backend_url}/api/favorites/check/${id}`,
+        `${process.env.REACT_APP_backend_url}/api/favorites/check/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -75,7 +75,7 @@ const ProductDetails = () => {
     try {
       const method = isFavorite ? "DELETE" : "POST";
       const response = await fetch(
-        `https://${process.env.backend_url}/api/favorites/${id}`,
+        `${process.env.REACT_APP_backend_url}/api/favorites/${id}`,
         {
           method,
           headers: {

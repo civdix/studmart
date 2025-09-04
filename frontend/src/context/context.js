@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   // Load user on first render if token is present
   const getImage = async (thing) => {
     const response = await fetch(
-      `https://${process.env.backend_url}/api/s3/getImage`,
+      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
       {
         method: "POST", // changed to POST
         headers: {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       return;
     }
-    fetch(`https://${process.env.backend_url}/api/users/profile/me`, {
+    fetch(`${process.env.REACT_APP_backend_url}/api/users/profile/me`, {
       headers: {
         studenttoken: token,
         "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     const response = await fetch(
-      `https://${process.env.backend_url}/api/products/${productId}`,
+      `${process.env.REACT_APP_backend_url}/api/products/${productId}`,
       {
         method: "DELETE",
         headers: {
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     const response = await fetch(
-      `https://${process.env.backend_url}/api/users/profile`,
+      `${process.env.REACT_APP_backend_url}/api/users/profile`,
       {
         method: "PATCH",
         headers: {

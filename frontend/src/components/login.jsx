@@ -18,7 +18,7 @@ const LoginPage = () => {
   // Demonic Screem...
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`https://${process.env.backend_url}/api/users/login`, {
+    fetch(`${process.env.REACT_APP_backend_url}/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

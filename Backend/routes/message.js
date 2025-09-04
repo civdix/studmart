@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const getImage = async (thing) => {
   const response = await fetch(
-    `https://${process.env.backend_url}/api/s3/getImage/`,
+    `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
     {
       method: "POST", // changed to POST
       headers: {

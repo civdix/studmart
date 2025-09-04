@@ -26,7 +26,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       // Add your API endpoints here
       const listingsResponse = await fetch(
-        `https://${process.env.backend_url}/api/products/getMyListing`,
+        `${process.env.REACT_APP_backend_url}/api/products/getMyListing`,
         {
           method: "GET",
           headers: {
@@ -58,7 +58,7 @@ const Dashboard = () => {
       // console.log("Fetching conversations...");
       // console.log("Token:", localStorage.getItem("token"));
       const response = await fetch(
-        `https://${process.env.backend_url}/api/messages/conversations`,
+        `${process.env.REACT_APP_backend_url}/api/messages/conversations`,
         {
           method: "GET",
           headers: {

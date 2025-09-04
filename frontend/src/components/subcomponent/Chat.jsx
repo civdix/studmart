@@ -49,7 +49,7 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://${process.env.backend_url}/api/messages/${recipientId}/${productId}`,
+        `${process.env.REACT_APP_backend_url}/api/messages/${recipientId}/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -70,7 +70,7 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
 
     try {
       const response = await fetch(
-        `https://${process.env.backend_url}/api/messages`,
+        `${process.env.REACT_APP_backend_url}/api/messages`,
         {
           method: "POST",
           headers: {

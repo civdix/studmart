@@ -37,7 +37,7 @@ const ProductSearch = () => {
 
   const fetchProducts = async () => {
     try {
-      let url = `https://${process.env.backend_url}/api/products?search=${searchTerm}`;
+      let url = `${process.env.REACT_APP_backend_url}/api/products?search=${searchTerm}`;
       if (category !== "all") url += `&category=${category}`;
       if (priceRange !== "all") url += `&priceRange=${priceRange}`;
       if (sortBy) url += `&sortBy=${sortBy}`;

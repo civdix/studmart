@@ -62,7 +62,7 @@ function EditProfile({ user, setShow }) {
     console.log(formData);
 
     const responseImageUpload = await fetch(
-      `https://${process.env.backend_url}/api/s3/uploadImage`,
+      `${process.env.REACT_APP_backend_url}/api/s3/uploadImage`,
       {
         method: "POST",
         body: formData,
