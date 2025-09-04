@@ -7,6 +7,8 @@ import { FaMessage, FaPerson, FaShop } from "react-icons/fa6";
 import { FaEdit, FaLink, FaTrash, FaUserCheck } from "react-icons/fa";
 import EditProfile from "./subcomponent/EditProfile.jsx";
 import "./styles/Dashboard.css"; // Assuming you have a CSS file for styling
+import dotenv from "dotenv";
+dotenv.config();
 const Dashboard = () => {
   const [userListings, setUserListings] = useState([]);
   const [transactions, setTransactions] = useState([]);
@@ -25,7 +27,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       // Add your API endpoints here
       const listingsResponse = await fetch(
-        `http://localhost:5000/api/products/getMyListing`,
+        `https://${process.env.backend_url}/api/products/getMyListing`,
         {
           method: "GET",
           headers: {
@@ -57,7 +59,7 @@ const Dashboard = () => {
       // console.log("Fetching conversations...");
       // console.log("Token:", localStorage.getItem("token"));
       const response = await fetch(
-        "http://localhost:5000/api/messages/conversations",
+        `https://${process.env.backend_url}/api/messages/conversations`,
         {
           method: "GET",
           headers: {

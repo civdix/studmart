@@ -10,6 +10,8 @@ import {
   FaLock,
   FaUniversity,
 } from "react-icons/fa";
+import dotenv from "dotenv";
+dotenv.config();
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const SignupPage = () => {
   useEffect(() => {
     if (formData.college.length >= 3) {
       fetch(
-        `http://localhost:5000/api/get/getCollege?college=${formData.college}`,
+        `https://${process.env.backend_url}/api/get/getCollege?college=${formData.college}`,
         {
           method: "GET",
           headers: {
@@ -66,7 +68,7 @@ const SignupPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      fetch("http://localhost:5000/api/users/register", {
+      fetch(`https://${process.env.backend_url}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

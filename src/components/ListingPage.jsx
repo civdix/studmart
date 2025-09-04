@@ -10,6 +10,8 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import dotenv from "dotenv";
+dotenv.config();
 import Navbar from "../components/Navbar";
 const ListItemPage = () => {
   const navigate = useNavigate();
@@ -110,15 +112,18 @@ const ListItemPage = () => {
     });
 
     try {
-      const response = await fetch("http://localhost:5000/api/s3/uploadImage", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `https://${process.env.backend_url}/api/s3/uploadImage`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const jsonResponseImage = await response.json();
 
       // Make Push in the item listing database  too
       const listingResponse = await fetch(
-        "http://localhost:5000/api/products/addListings",
+        `https://${process.env.backend_url}/api/products/addListings`,
         {
           method: "POST",
           headers: {

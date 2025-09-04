@@ -4,6 +4,8 @@ import { FaLink, FaPaperPlane } from "react-icons/fa";
 
 import "../styles/Chat.css"; // Import your CSS file for styling
 import { useNavigate } from "react-router-dom";
+import dotenv from "dotenv";
+dotenv.config();
 // import { useAuth } from "../context/context";
 const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
   const itemDeleted = productData ? false : true;
@@ -48,7 +50,7 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/messages/${recipientId}/${productId}`,
+        `https://${process.env.backend_url}/api/messages/${recipientId}/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -68,18 +70,21 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
     if (!newMessage.trim()) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          recipientId,
-          productId,
-          content: newMessage,
-        }),
-      });
+      const response = await fetch(
+        `https://${process.env.backend_url}/api/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            recipientId,
+            productId,
+            content: newMessage,
+          }),
+        }
+      );
 
       if (response.ok) {
         setNewMessage("");

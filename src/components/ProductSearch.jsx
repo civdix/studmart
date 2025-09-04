@@ -8,7 +8,8 @@ import {
   Button,
   InputGroup,
 } from "react-bootstrap";
-
+import dotenv from "dotenv";
+dotenv.config();
 import { FaSearch, FaFilter } from "react-icons/fa";
 import "./styles/products.css";
 
@@ -37,7 +38,7 @@ const ProductSearch = () => {
 
   const fetchProducts = async () => {
     try {
-      let url = `http://localhost:5000/api/products?search=${searchTerm}`;
+      let url = `https://${process.env.backend_url}/api/products?search=${searchTerm}`;
       if (category !== "all") url += `&category=${category}`;
       if (priceRange !== "all") url += `&priceRange=${priceRange}`;
       if (sortBy) url += `&sortBy=${sortBy}`;

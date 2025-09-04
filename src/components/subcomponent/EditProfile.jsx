@@ -3,6 +3,8 @@ import { useAuth } from "../../context/context";
 import { FaCross } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import Loading from "./Loading";
+import dotenv from "dotenv";
+dotenv.config();
 function EditProfile({ user, setShow }) {
   const [preview, setPreview] = useState(null);
   const [userData, setUserData] = useState({});
@@ -61,7 +63,7 @@ function EditProfile({ user, setShow }) {
     console.log(formData);
 
     const responseImageUpload = await fetch(
-      "http://localhost:5000/api/s3/uploadImage",
+      `https://${process.env.backend_url}/api/s3/uploadImage`,
       {
         method: "POST",
         body: formData,

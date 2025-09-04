@@ -2,7 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 // Create context
 const AuthContext = createContext();
-
+import dotenv from "dotenv";
+dotenv.config();
 // Provider component
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -13,16 +14,19 @@ export const AuthProvider = ({ children }) => {
   });
   // Load user on first render if token is present
   const getImage = async (thing) => {
-    const response = await fetch("http://localhost:5000/api/s3/getImage", {
-      method: "POST", // changed to POST
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        imageUrls: [thing.profilePicture] || [thing.images],
-        productId: thing.productId || null, // Ensure productId is passed if available
-      }),
-    });
+    const response = await fetch(
+      `https://${process.env.backend_url}/api/s3/getImage`,
+      {
+        method: "POST", // changed to POST
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrls: [thing.profilePicture] || [thing.images],
+          productId: thing.productId || null, // Ensure productId is passed if available
+        }),
+      }
+    );
 
     const { success, imageUrl } = await response.json();
     if (success) {
@@ -40,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       return;
     }
-    fetch(`http://localhost:5000/api/users/profile/me`, {
+    fetch(`https://${process.env.backend_url}/api/users/profile/me`, {
       headers: {
         studenttoken: token,
         "Content-Type": "application/json",
@@ -86,7 +90,7 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     const response = await fetch(
-      `http://localhost:5000/api/products/${productId}`,
+      `https://${process.env.backend_url}/api/products/${productId}`,
       {
         method: "DELETE",
         headers: {
@@ -108,14 +112,17 @@ export const AuthProvider = ({ children }) => {
       customMsg: "Updating the User Details",
       customLoading: "The Item will be permanently deleted",
     });
-    const response = await fetch(`http://localhost:5000/api/users/profile`, {
-      method: "PATCH",
-      headers: {
-        studenttoken: localStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userUpdates),
-    });
+    const response = await fetch(
+      `https://${process.env.backend_url}/api/users/profile`,
+      {
+        method: "PATCH",
+        headers: {
+          studenttoken: localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userUpdates),
+      }
+    );
 
     const data = await response.json();
 

@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaBook, FaEnvelope, FaLock } from "react-icons/fa";
 import { useAuth } from "../context/context";
+import dotenv from "dotenv";
+dotenv.config();
 const LoginPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,7 +19,7 @@ const LoginPage = () => {
   // Demonic Screem...
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/api/users/login", {
+    fetch(`https://${process.env.backend_url}/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

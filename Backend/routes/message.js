@@ -2,17 +2,22 @@ const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
 const auth = require("../middlewares/auth");
+const dotenv = require("dotenv");
+dotenv.config();
 const getImage = async (thing) => {
-  const response = await fetch("http://localhost:5000/api/s3/getImage/", {
-    method: "POST", // changed to POST
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      imageUrls: [thing.profilePicture] || [thing.images],
-      userId: thing.id,
-    }),
-  });
+  const response = await fetch(
+    `https://${process.env.backend_url}/api/s3/getImage/`,
+    {
+      method: "POST", // changed to POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageUrls: [thing.profilePicture] || [thing.images],
+        userId: thing.id,
+      }),
+    }
+  );
 
   const { success, imageUrl } = await response.json();
   if (success) {
