@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const serverless = require("serverless-http");
 require("dotenv").config();
 
 const app = express();
@@ -18,24 +19,34 @@ app.use("/api/products", require("./routes/product.js"));
 app.use("/api/messages", require("./routes/message"));
 app.use("/api/transactions", require("./routes/transaction"));
 app.use("/api/get", require("./routes/secondaryGets"));
-
+app.use("/api/test",(req,res)=>{
+  res.send("Server is working")
+})
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Something went wrong!" });
 });
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
+// MongoDB connection (only connect once)
+let isConnected;
+async function connectToDatabase() {
+  if (isConnected) return;
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URI);
+    isConnected = db.connections[0].readyState;
     console.log("Connected to MongoDB");
-    // Start server
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error("MongoDB connection error:", error);
-  });
+  }
+}
+
+// Ensure DB is connected before handling any route
+app.use(async (req, res, next) => {
+  await connectToDatabase();
+  next();
+});
+
+// Export the app as a serverless handler
+module.exports = app;
+module.exports.handler = serverless(app);
