@@ -2,7 +2,10 @@ const { Redis } = require("ioredis");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-const redis = new Redis(process.env.REDIS_URL);
+const redis = new Redis(process.env.REDIS_URL, {
+  tls: {}, // required for Upstash
+  retryStrategy: (times) => Math.min(times * 50, 2000), // auto-retry on drop
+});
 // await redis.set("foo", "bar");
 // const redis = new Redis({
 //   password: "mypassword",

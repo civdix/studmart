@@ -57,6 +57,7 @@ const SignupPage = () => {
   }, [debouncingQuery]);
   const [collegeList, setCollegeList] = useState([]);
   const [collegesView, setCollegesView] = useState("");
+  const [IsSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,13 +66,14 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       fetch(`${process.env.REACT_APP_backend_url}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       }).then((response) => {
-        let dataR;
+        var dataR;
         response.json().then((data) => {
           dataR = data;
         });
@@ -79,11 +81,14 @@ const SignupPage = () => {
           alert("Sign Up Successfull make Login with your credentials");
           navigate("/login");
         } else {
+          console.log("Signup Error: ", response);
           alert("Some thing problem");
         }
       });
       console.log("Signup form submitted:", formData);
+      setIsSubmitting(false);
     } catch (err) {
+      setIsSubmitting(false);
       alert("SignUp Unsuccessfull");
       console.log("Error in Signup js Handle submit fucntion", err);
     }
@@ -105,7 +110,7 @@ const SignupPage = () => {
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form>
                   <div className="row g-3">
                     {/* Full Name */}
                     <div className="col-12">
@@ -392,8 +397,12 @@ const SignupPage = () => {
                         <button
                           type="submit"
                           className="btn btn-primary btn-lg themeButton"
+                          disabled={IsSubmitting}
+                          onClick={handleSubmit}
                         >
-                          Create Account
+                          {IsSubmitting
+                            ? "Creating Account..."
+                            : "Create Account"}
                         </button>
                       </div>
                     </div>
