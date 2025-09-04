@@ -13,15 +13,15 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
-app.use("/api/users", require("./routes/user"));
-app.use("/api/s3", require("./routes/AWSS3"));
-app.use("/api/products", require("./routes/product.js"));
-app.use("/api/messages", require("./routes/message"));
-app.use("/api/transactions", require("./routes/transaction"));
-app.use("/api/get", require("./routes/secondaryGets"));
-app.use("/api/test",(req,res)=>{
-  res.send("Server is working")
-})
+app.use("/api/users", require("../routes/user.js"));
+app.use("/api/s3", require("../routes/AWSS3"));
+app.use("/api/products", require("../routes/product.js"));
+app.use("/api/messages", require("../routes/message"));
+app.use("/api/transactions", require("../routes/transaction"));
+app.use("/api/get", require("../routes/secondaryGets"));
+app.use("/api/test", (req, res) => {
+  res.send("Server is working");
+});
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
