@@ -3,7 +3,7 @@ const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const redis = new Redis(process.env.REDIS_URL);
-await redis.set("foo", "bar");
+// await redis.set("foo", "bar");
 // const redis = new Redis({
 //   password: "mypassword",
 //   //   host: process.env.REDIS_HOST,

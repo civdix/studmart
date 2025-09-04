@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Container, Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../src/context/context.js";
+import { useAuth } from "../context/context.js";
 import MessageArea from "./MessageArea.jsx";
 import { FaMessage, FaPerson, FaShop } from "react-icons/fa6";
 import { FaEdit, FaLink, FaTrash, FaUserCheck } from "react-icons/fa";
