@@ -67,7 +67,6 @@ const SignupPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      setIsSubmitting(true);
       console.log("Submitting form data ", IsSubmitting);
       fetch(`${process.env.REACT_APP_backend_url}/api/users/register`, {
         method: "POST",
@@ -399,7 +398,10 @@ const SignupPage = () => {
                           type="submit"
                           className="btn btn-primary btn-lg themeButton"
                           disabled={IsSubmitting}
-                          onClick={handleSubmit}
+                          onClick={() => {
+                            setIsSubmitting(true);
+                            handleSubmit();
+                          }}
                         >
                           {IsSubmitting
                             ? "Creating Account..."
