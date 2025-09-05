@@ -398,9 +398,9 @@ const SignupPage = () => {
                           type="submit"
                           className="btn btn-primary btn-lg themeButton"
                           disabled={IsSubmitting}
-                          onClick={() => {
+                          onClick={(e) => {
                             setIsSubmitting(true);
-                            handleSubmit();
+                            handleSubmit(e);
                           }}
                         >
                           {IsSubmitting
