@@ -68,6 +68,7 @@ const SignupPage = () => {
     e.preventDefault();
     try {
       setIsSubmitting(true);
+      console.log("Submitting form data ", IsSubmitting);
       fetch(`${process.env.REACT_APP_backend_url}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
