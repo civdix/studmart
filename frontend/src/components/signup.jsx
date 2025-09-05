@@ -66,8 +66,8 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     try {
+      setIsSubmitting(true);
       fetch(`${process.env.REACT_APP_backend_url}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -316,7 +316,7 @@ const SignupPage = () => {
                     {/* Password */}
                     <div className="col-md-6">
                       <label htmlFor="password" className="form-label">
-                        Password
+                        Password {IsSubmitting}
                       </label>
                       <div className="input-group">
                         <span className="input-group-text bg-light">
