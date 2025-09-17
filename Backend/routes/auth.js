@@ -6,8 +6,17 @@ const fetchStudentId = require("../middlewares/fetchStudentId");
 require("dotenv").config();
 
 router.post("/signup", (req, res) => {
-  const { name, college, email, collegeEmail, rollNumber, password } = req.body;
-  Student.create({ name, college, email, collegeEmail, rollNumber, password })
+  const { name, college, email, collegeEmail, rollNumber, password, phone } =
+    req.body;
+  Student.create({
+    name,
+    college,
+    email,
+    collegeEmail,
+    rollNumber,
+    password,
+    phone,
+  })
     .then((response) => {
       res.status(200).json({ success: true, StudentData: response });
     })
@@ -23,17 +32,22 @@ router.post("/signup", (req, res) => {
     });
 });
 
-router.get("/login", (req, res) => {
+router.post("/login", (req, res) => {
+  console.log("Reached to the Login Route", req.headers);
   const { email, password } = req.headers;
-  Student.findOne({ email, password })
+  Student.findOne({ collegeEmail: email, password })
     .then((data) => {
+      console.log("Student fetched from DB:", data);
+      if (data == null) {
+        return res.status(400).json({ success: false, msg: "No User Found" });
+      }
       const payload = {
         student: {
           Id: data.id,
         },
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET_KEY);
-      // console.log("user Found with id:", data.id + "\n");
+      console.log("user Found with id:", data.id + "\n token=", token);
       res.status(200).json({ success: true, StudentData: data, token });
     })
     .catch((err) => {

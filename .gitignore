@@ -5,6 +5,8 @@
 node_modules
 /.pnp
 .pnp.js
+*/.env
+*.env
 Backend/node_modules
 Backend/.env
 Backend/.env.local

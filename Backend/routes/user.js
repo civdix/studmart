@@ -30,6 +30,14 @@ const generateAuthToken = (id) => {
 // Register new user
 router.post("/register", async (req, res) => {
   try {
+    console.log("Reached to the Register Route", req.body);
+    let existingUser = await User.findOne({ email: req.body.email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: "User with this email already exists" });
+    }
+
     const user = new User(req.body);
     await user.save();
     const token = await generateAuthToken(user._id);
@@ -42,16 +50,19 @@ router.post("/register", async (req, res) => {
 // Login user
 router.post("/login", async (req, res) => {
   try {
-    console.log("Reached to the Login Route");
+    console.log("Reached to the Login Route", req.body, req.headers);
+
     const user = await User.findOne({
-      email: req.headers.email,
+      collegeEmail: req.headers.email,
     });
-    if (!user.comparePassword(req.headers.password)) {
-      res.status(400).json({
+    console.log("User fetched from DB:", user);
+    if (user == null || !user.comparePassword(req.headers.password)) {
+      return res.status(400).json({
         success: false,
         error: "Pass do not match: Invalid credentials",
       });
     }
+    console.log("User Found:", user);
     const token = await generateAuthToken(user._id);
     console.log({ success: true, user, token });
     res.status(201).json({ success: true, user, token });
@@ -84,28 +95,27 @@ router.get("/profile/me", auth, getSignedImages, async (req, res) => {
   }
   // Recieving right Object Id
   if (!req.imageUrlFromRedisMiddleware) {
-    const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
-      {
-        method: "POST", // changed to POST
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          imageUrls: [user.profilePicture],
-          userId: user._id || null, // Ensure productId is passed if available
-        }),
-      }
-    );
-    const { success, imageUrl } = await response.json();
+    const response = await fetch(`http://localhost:5000/api/s3/getImage`, {
+      method: "POST", // changed to POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageUrls: [user.profilePicture],
+        userId: user._id || null, // Ensure productId is passed if available
+      }),
+    });
+    var { success, imageUrl } = await response.json();
     if (!success) {
-      return res.status(500).json({
-        success: false,
-        error: "Failed to fetch profile picture",
-      });
+      imageUrl =
+        "https://i.pinimg.com/236x/e5/5f/ea/e55fea07b027aef280c701ae0ea3bb7f.jpg";
+      // return res.status(500).json({
+      //   success: false,
+      //   error: "Failed to fetch profile picture",
+      // });
     }
-    setSignedImages(user._id, imageUrl, 5000); // Store the signed URL in Redis with a 1-hour expiry
     user.profilePicture = imageUrl;
+    setSignedImages(user._id, imageUrl, 5000); // Store the signed URL in Redis with a 1-hour expiry
     res.status(201).json({ success: true, user });
   } else {
     user.profilePicture = req.imageUrlFromRedisMiddleware;
@@ -117,41 +127,39 @@ router.get("/profile/me", auth, getSignedImages, async (req, res) => {
 //  have to make cache the image if changes the profile photot as the
 //  reddis will point to old image still
 //  on changing, i should delete old image
-router.patch(
-  "/profile",
-  auth,
-  upload.single("profilePicture"),
-  async (req, res) => {
-    const updates = Object.keys(req.body);
+router.patch("/profile", auth, async (req, res) => {
+  delete req.body.userId;
+  const updates = Object.keys(req.body);
+  console.log("Updates", updates);
+  const allowedUpdates = [
+    "name",
+    "email",
+    "password",
+    "college",
+    "phone",
+    "profilePicture",
+    "savedListings",
+  ];
+  console.log(req.body);
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
 
-    const allowedUpdates = [
-      "name",
-      "email",
-      "password",
-      "college",
-      "phone",
-      "profilePicture",
-    ];
-    const isValidOperation = updates.every((update) =>
-      allowedUpdates.includes(update)
-    );
-
-    if (!isValidOperation) {
-      return res.status(400).json({ error: "Invalid updates!" });
-    }
-
-    try {
-      updates.forEach((update) => (req.user[update] = req.body[update]));
-      if (req.file) {
-        req.user.profilePicture = req.file.path;
-      }
-      await req.user.save();
-      res.json(req.user);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
+  if (!isValidOperation) {
+    return res.status(400).json({ error: "Invalid updates!" });
   }
-);
+
+  try {
+    updates.forEach((update) => (req.user[update] = req.body[update]));
+    if (req.file) {
+      req.user.profilePicture = req.file.path;
+    }
+    await req.user.save();
+    res.json(req.user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 // Get user's listings
 router.get("/listings", auth, async (req, res) => {

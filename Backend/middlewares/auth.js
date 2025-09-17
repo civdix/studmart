@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const Student = require("../models/student");
 require("dotenv").config();
 const auth = async (req, res, next) => {
   try {
@@ -11,21 +11,21 @@ const auth = async (req, res, next) => {
     // if (!token) {
     //   throw new Error();
     // }
-
+    console.log("Token found:", token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    const user = await User.findOne({ _id: decoded.user.id });
-    if (!user) {
+    const student = await Student.findOne({ _id: decoded.student.Id });
+    if (!student) {
       throw new Error();
     }
 
     req.token = token;
-    req.user = user;
-    req.body.userId = user._id;
+    req.user = student;
+    req.body.userId = student._id;
     console.log("user = ", req.user.name);
 
     next();
   } catch (error) {
-    res.status(401).json({ error: "Please authenticate.", error });
+    res.status(401).json({ ErrorMsg: "Please authenticate.", error });
   }
 };
 

@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const navigate = useNavigate();
 
-  const { currentUser, loading, deleteProduct } = useAuth();
+  const { currentUser, loading, setCurrentUser, deleteProduct } = useAuth();
   useEffect(() => {
     // Fetch user's listings and transactions
     fetchUserData();
@@ -26,7 +26,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       // Add your API endpoints here
       const listingsResponse = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/products/getMyListing`,
+        `http://localhost:5000/api/products/getMyListing`,
         {
           method: "GET",
           headers: {
@@ -58,7 +58,7 @@ const Dashboard = () => {
       // console.log("Fetching conversations...");
       // console.log("Token:", localStorage.getItem("token"));
       const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/messages/conversations`,
+        `http://localhost:5000/api/messages/conversations`,
         {
           method: "GET",
           headers: {
@@ -68,6 +68,7 @@ const Dashboard = () => {
         }
       );
       const responseJson = await response.json();
+
       setConversation(responseJson);
       console.log(responseJson);
     } catch (e) {
@@ -78,7 +79,11 @@ const Dashboard = () => {
   return (
     <>
       <div className={showEditProfileModal ? "" : "d-none"}>
-        <EditProfile user={currentUser} setShow={setShowEditProfileModal} />
+        <EditProfile
+          user={currentUser}
+          setUser={setCurrentUser}
+          setShow={setShowEditProfileModal}
+        />
       </div>
       <Container className="py-5 position-relative">
         <h2 className="mb-4">My Dashboard</h2>

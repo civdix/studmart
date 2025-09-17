@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 // Provider component
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [loadingData, setLoadingData] = useState({
     customMsg: "Loading the Product Details",
@@ -13,19 +13,16 @@ export const AuthProvider = ({ children }) => {
   });
   // Load user on first render if token is present
   const getImage = async (thing) => {
-    const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
-      {
-        method: "POST", // changed to POST
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          imageUrls: [thing.profilePicture] || [thing.images],
-          productId: thing.productId || null, // Ensure productId is passed if available
-        }),
-      }
-    );
+    const response = await fetch(`http://localhost:5000/api/s3/getImage`, {
+      method: "POST", // changed to POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageUrls: [thing.profilePicture] || [thing.images],
+        productId: thing.productId || null, // Ensure productId is passed if available
+      }),
+    });
 
     const { success, imageUrl } = await response.json();
     if (success) {
@@ -43,7 +40,8 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       return;
     }
-    fetch(`${process.env.REACT_APP_backend_url}/api/users/profile/me`, {
+
+    fetch(`http://localhost:5000/api/users/profile/me`, {
       headers: {
         studenttoken: token,
         "Content-Type": "application/json",
@@ -53,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       .then((response) => {
         if (response.success) {
           setCurrentUser(response.user);
+          console.log("User loaded from token:", response.user);
         }
       })
       .catch((err) => {
@@ -89,7 +88,7 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/products/${productId}`,
+      `http://localhost:5000/api/products/${productId}`,
       {
         method: "DELETE",
         headers: {
@@ -104,24 +103,22 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const changeUserDetails = async (userId, userUpdates) => {
+  const changeUserDetails = async (userId, updatingData) => {
     setLoading(true);
     let previousLoading = loadingData;
     setLoadingData({
       customMsg: "Updating the User Details",
       customLoading: "The Item will be permanently deleted",
     });
-    const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/users/profile`,
-      {
-        method: "PATCH",
-        headers: {
-          studenttoken: localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userUpdates),
-      }
-    );
+    console.log("User data to update", updatingData);
+    const response = await fetch(`http://localhost:5000/api/users/profile`, {
+      method: "PATCH",
+      headers: {
+        studenttoken: localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatingData),
+    });
 
     const data = await response.json();
 

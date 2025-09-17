@@ -18,6 +18,7 @@ async function getSignedImages(req, res, next) {
   try {
     const id = req.body.userId || req.body.productId;
     if (!id) {
+      console.log("NO Id Found");
       return res.status(400).json({
         error: "Bad Request: userId or productId is required",
       });
@@ -29,6 +30,7 @@ async function getSignedImages(req, res, next) {
     } else {
       console.log("Cache miss for product images, fetching from  s3");
     }
+
     next();
   } catch (error) {
     console.error("Error fetching signed images:", error);

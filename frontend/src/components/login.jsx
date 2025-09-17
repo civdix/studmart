@@ -18,7 +18,7 @@ const LoginPage = () => {
   // Demonic Screem...
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`${process.env.REACT_APP_backend_url}/api/users/login`, {
+    fetch(`http://localhost:5000/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const LoginPage = () => {
         if (response.success) {
           localStorage.setItem("token", response.token);
           setCurrentUser(response.user);
-          alert("Login Successfull Hello " + response.user.name);
+          alert("Login Successfull Hello " + response.StudentData.name);
           navigate("/Dashboard");
         } else {
           console.log("Login failed:", response.error);

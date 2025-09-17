@@ -4,10 +4,11 @@ import { FaCross } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import Loading from "./Loading";
 
-function EditProfile({ user, setShow }) {
+function EditProfile({ user, setShow, setUser }) {
   const [preview, setPreview] = useState(null);
   const [userData, setUserData] = useState({});
-
+  const [imageChange, setImageChange] = useState(false);
+  const [updatingData, setUpdatingData] = useState({});
   useEffect(() => {
     if (user) {
       setUserData({
@@ -38,6 +39,10 @@ function EditProfile({ user, setShow }) {
       ...userData,
       profilePicture: file,
     });
+    setUpdatingData({
+      ...updatingData,
+      profilePicture: file,
+    });
   };
 
   const handleChange = (event) => {
@@ -46,61 +51,66 @@ function EditProfile({ user, setShow }) {
       ...userData,
       [event.target.id]: event.target.value,
     });
+    setUpdatingData({
+      ...updatingData,
+      [event.target.id]: event.target.value,
+    });
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("_id", userData._id);
-    formData.append("title", userData.title);
-    formData.append("description", userData.description);
-    formData.append("price", userData.price);
-    formData.append("category", userData.category);
-    formData.append("barterPreferences", userData.barterPreferences);
-    formData.append("publishedDate", new Date().toISOString());
-    formData.append(`image${0}`, userData.profilePicture);
-    console.log(formData);
+    if (imageChange) {
+      setLoading(true);
+      const formData = new FormData();
+      Object.entries(updatingData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
 
-    const responseImageUpload = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/uploadImage`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const jsonResponseImage = await responseImageUpload.json();
-    console.log(
-      "This is a json response from image upload",
-      jsonResponseImage.AWSName + "\n This is profile picrturw",
-      userData.profilePicture
-    );
-    const updatedUserData = {
-      ...userData,
-      profilePicture: jsonResponseImage.AWSName,
-    };
-    console.log("User Data profile Image", updatedUserData.profilePicture);
-    const userDataChange = Object.keys(updatedUserData).reduce((acc, key) => {
-      if (updatedUserData[key] !== user[key]) {
-        acc[key] = updatedUserData[key];
-      }
-      return acc;
-    }, {});
-    console.log("User Data Change", userDataChange);
-    if (Object.keys(userDataChange).length === 0) {
-      setShow(false);
-      console.log("No changes made to user data");
-      return;
+      formData.append("_id", userData._id);
+      console.log(formData);
+      setLoadingData({
+        customMsg: "Uploading Profile Picture",
+        customLoading: "Your Profile Picture is being uploaded",
+      });
+      const responseImageUpload = await fetch(
+        `http://localhost:5000/api/s3/uploadImage`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const jsonResponseImage = await responseImageUpload.json();
+      console.log(
+        "This is a json response from image upload",
+        jsonResponseImage.AWSName + "\n This is profile picrturw",
+        userData.profilePicture
+      );
+
+      setUpdatingData({
+        ...updatingData,
+        profilePicture: jsonResponseImage.AWSName,
+      });
+    } else {
+      console.log("No Image to update");
     }
-    setUserData(updatedUserData);
+    setLoadingData({
+      customMsg: "Updating User Details",
+      customLoading: "Your Edit(s) is being processing",
+    });
+    // console.log(
+    //   "User Data profile Image and does image changed",
+    //   imageChange,
+    //   updatingData.profilePicture
+    // );
 
-    console.log("User Data Change", userDataChange);
-    const response = await changeUserDetails(userData?._id, userDataChange);
+    console.log("User Data Change", updatingData);
+    const response = await changeUserDetails(userData?._id, updatingData);
     if (response?.success) {
+      setUser({ ...user, ...updatingData });
       setLoadingData({
         customMsg: "User Details Updated",
         customLoading: "The User Details have been updated",
       });
-      setUserData(response.userData);
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -131,6 +141,7 @@ function EditProfile({ user, setShow }) {
             accept="image/*"
             onChange={profilePictureChange}
             id="profilePicture"
+            onClick={() => setImageChange(true)}
             // value={userData?.profilePicture.name}
           />
         </div>

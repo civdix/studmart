@@ -38,9 +38,7 @@ const ProductDetails = () => {
 
   const fetchProductDetails = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/products/${id}`
-      );
+      const response = await fetch(`http://localhost:5000/api/products/${id}`);
       const data = await response.json();
       console.log("Fetched data is ", data);
       setProduct(data);
@@ -51,16 +49,9 @@ const ProductDetails = () => {
 
   const checkIfFavorite = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/favorites/check/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      const data = await response.json();
-      setIsFavorite(data.isFavorite);
+      if (currentUser.length > 2 && currentUser?.savedListings.includes(id)) {
+        setIsFavorite(true);
+      }
     } catch (error) {
       console.error("Error checking favorite status:", error);
     }
@@ -73,18 +64,22 @@ const ProductDetails = () => {
     }
 
     try {
-      const method = isFavorite ? "DELETE" : "POST";
-      const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/favorites/${id}`,
-        {
-          method,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const newSavedListings = isFavorite
+        ? currentUser.savedListings.filter((item) => item !== id)
+        : [...currentUser.savedListings, id];
+
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ savedListings: newSavedListings }),
+      });
 
       if (response.ok) {
+        const updatedUser = await response.json();
+        localStorage.setItem("user", JSON.stringify(updatedUser));
         setIsFavorite(!isFavorite);
       }
     } catch (error) {
