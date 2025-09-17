@@ -38,7 +38,9 @@ const ProductDetails = () => {
 
   const fetchProductDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_backend_url}/api/products/${id}`
+      );
       const data = await response.json();
       console.log("Fetched data is ", data);
       setProduct(data);
@@ -68,14 +70,17 @@ const ProductDetails = () => {
         ? currentUser.savedListings.filter((item) => item !== id)
         : [...currentUser.savedListings, id];
 
-      const response = await fetch("http://localhost:5000/api/user/profile", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ savedListings: newSavedListings }),
-      });
+      const response = await fetch(
+        "${process.env.REACT_APP_backend_url}/api/user/profile",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ savedListings: newSavedListings }),
+        }
+      );
 
       if (response.ok) {
         const updatedUser = await response.json();

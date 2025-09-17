@@ -51,16 +51,19 @@ router.get("/getMyListing", auth, async (req, res) => {
     // console.log("Products found");
     await Promise.all(
       products.map(async (product) => {
-        const response = await fetch(`http://localhost:5000/api/s3/getImage/`, {
-          method: "POST", // changed to POST
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imageUrls: product.images,
-            productId: product._id,
-          }), // Pass product ID for S3 image retrieval
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
+          {
+            method: "POST", // changed to POST
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              imageUrls: product.images,
+              productId: product._id,
+            }), // Pass product ID for S3 image retrieval
+          }
+        );
 
         const { success, imageUrl } = await response.json();
         if (success) {
@@ -118,16 +121,19 @@ router.get("/", async (req, res) => {
 
     await Promise.all(
       products.map(async (product) => {
-        const response = await fetch(`http://localhost:5000/api/s3/getImage/`, {
-          method: "POST", // changed to POST
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imageUrls: product.images,
-            productId: product._id, // Pass product ID for S3 image retrieval
-          }),
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
+          {
+            method: "POST", // changed to POST
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              imageUrls: product.images,
+              productId: product._id, // Pass product ID for S3 image retrieval
+            }),
+          }
+        );
 
         const { success, imageUrl } = await response.json();
         if (success) {
@@ -165,16 +171,19 @@ router.get("/:id", async (req, res) => {
     // if (awsSignedUrlRegex.test(product.images[0])) {
     //   // Nothing to do
     // } else {
-    const response = await fetch(`http://localhost:5000/api/s3/getImage/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        imageUrls: product.images,
-        productId: product._id,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrls: product.images,
+          productId: product._id,
+        }),
+      }
+    );
 
     const { success, imageUrl } = await response.json();
     if (success) {
@@ -240,7 +249,7 @@ router.delete("/:id", auth, async (req, res) => {
   try {
     // Implelement S3 delete image API here
     const response = await fetch(
-      `http://localhost:5000/api/s3/deleteImage/${req.params.id}`,
+      `${process.env.REACT_APP_backend_url}/api/s3/deleteImage/${req.params.id}`,
       {
         method: "DELETE",
         headers: {

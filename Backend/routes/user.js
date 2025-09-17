@@ -95,16 +95,19 @@ router.get("/profile/me", auth, getSignedImages, async (req, res) => {
   }
   // Recieving right Object Id
   if (!req.imageUrlFromRedisMiddleware) {
-    const response = await fetch(`http://localhost:5000/api/s3/getImage`, {
-      method: "POST", // changed to POST
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        imageUrls: [user.profilePicture],
-        userId: user._id || null, // Ensure productId is passed if available
-      }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
+      {
+        method: "POST", // changed to POST
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrls: [user.profilePicture],
+          userId: user._id || null, // Ensure productId is passed if available
+        }),
+      }
+    );
     var { success, imageUrl } = await response.json();
     if (!success) {
       imageUrl =

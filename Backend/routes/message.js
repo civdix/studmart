@@ -5,7 +5,7 @@ const auth = require("../middlewares/auth");
 const dotenv = require("dotenv");
 dotenv.config();
 const getImage = async (thing) => {
-  const response = await fetch(`http://localhost:5000/api/s3/getImage/`, {
+  const response = await fetch(`${process.env.REACT_APP_backend_url}/api/s3/getImage/`, {
     method: "POST", // changed to POST
     headers: {
       "Content-Type": "application/json",

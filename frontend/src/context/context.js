@@ -13,16 +13,19 @@ export const AuthProvider = ({ children }) => {
   });
   // Load user on first render if token is present
   const getImage = async (thing) => {
-    const response = await fetch(`http://localhost:5000/api/s3/getImage`, {
-      method: "POST", // changed to POST
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        imageUrls: [thing.profilePicture] || [thing.images],
-        productId: thing.productId || null, // Ensure productId is passed if available
-      }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
+      {
+        method: "POST", // changed to POST
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrls: [thing.profilePicture] || [thing.images],
+          productId: thing.productId || null, // Ensure productId is passed if available
+        }),
+      }
+    );
 
     const { success, imageUrl } = await response.json();
     if (success) {
@@ -41,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    fetch(`http://localhost:5000/api/users/profile/me`, {
+    fetch(`${process.env.REACT_APP_backend_url}/api/users/profile/me`, {
       headers: {
         studenttoken: token,
         "Content-Type": "application/json",
@@ -88,7 +91,7 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     const response = await fetch(
-      `http://localhost:5000/api/products/${productId}`,
+      `${process.env.REACT_APP_backend_url}/api/products/${productId}`,
       {
         method: "DELETE",
         headers: {
@@ -111,14 +114,17 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     console.log("User data to update", updatingData);
-    const response = await fetch(`http://localhost:5000/api/users/profile`, {
-      method: "PATCH",
-      headers: {
-        studenttoken: localStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatingData),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_backend_url}/api/users/profile`,
+      {
+        method: "PATCH",
+        headers: {
+          studenttoken: localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatingData),
+      }
+    );
 
     const data = await response.json();
 

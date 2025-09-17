@@ -73,7 +73,7 @@ function EditProfile({ user, setShow, setUser }) {
         customLoading: "Your Profile Picture is being uploaded",
       });
       const responseImageUpload = await fetch(
-        `http://localhost:5000/api/s3/uploadImage`,
+        `${process.env.REACT_APP_backend_url}/api/s3/uploadImage`,
         {
           method: "POST",
           body: formData,
