@@ -32,7 +32,7 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
   // useEffect(async () => {
   //   try {
   //     const response = await fetch(
-  //       `${process.env.REACT_APP_backend_url}/api/products/${productId}`
+  //       `${process.env.REACT_APP_backend_url || 'http://localhost:5000'}/api/products/${productId}`
   //     );
   //     const data = await response.json();
   //     if (data) {
@@ -49,7 +49,9 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/messages/${recipientId}/${productId}`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/messages/${recipientId}/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -70,7 +72,9 @@ const Chat = ({ recipientId, productId, productData, recipientInfo }) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/messages`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/messages`,
         {
           method: "POST",
           headers: {

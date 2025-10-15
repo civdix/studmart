@@ -26,7 +26,9 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       // Add your API endpoints here
       const listingsResponse = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/products/getMyListing`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/products/getMyListing`,
         {
           method: "GET",
           headers: {
@@ -36,7 +38,7 @@ const Dashboard = () => {
         }
       );
       //   const transactionsResponse = await fetch(
-      //     "${process.env.REACT_APP_backend_url}/api/transactions",
+      //     "${process.env.REACT_APP_backend_url || 'http://localhost:5000'}/api/transactions",
       //     {
       //       headers: {
       //         Authorization: `Bearer ${token}`,
@@ -58,7 +60,9 @@ const Dashboard = () => {
       // console.log("Fetching conversations...");
       // console.log("Token:", localStorage.getItem("token"));
       const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/messages/conversations`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/messages/conversations`,
         {
           method: "GET",
           headers: {

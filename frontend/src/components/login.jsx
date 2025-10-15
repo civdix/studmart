@@ -18,13 +18,18 @@ const LoginPage = () => {
   // Demonic Screem...
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`${process.env.REACT_APP_backend_url}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...formData,
-      },
-    })
+    fetch(
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/auth/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...formData,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((response) => {
         if (response.success) {

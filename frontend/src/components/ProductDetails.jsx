@@ -39,7 +39,9 @@ const ProductDetails = () => {
   const fetchProductDetails = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/products/${id}`
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/products/${id}`
       );
       const data = await response.json();
       console.log("Fetched data is ", data);
@@ -71,7 +73,7 @@ const ProductDetails = () => {
         : [...currentUser.savedListings, id];
 
       const response = await fetch(
-        "${process.env.REACT_APP_backend_url}/api/user/profile",
+        "${process.env.REACT_APP_backend_url || 'http://localhost:5000'}/api/user/profile",
         {
           method: "PATCH",
           headers: {

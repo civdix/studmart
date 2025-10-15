@@ -112,7 +112,9 @@ const ListItemPage = () => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/s3/uploadImage`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/s3/uploadImage`,
         {
           method: "POST",
           body: formData,
@@ -122,7 +124,9 @@ const ListItemPage = () => {
 
       // Make Push in the item listing database  too
       const listingResponse = await fetch(
-        `${process.env.REACT_APP_backend_url}/api/products/addListings`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/products/addListings`,
         {
           method: "POST",
           headers: {

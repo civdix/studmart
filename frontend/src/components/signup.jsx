@@ -40,7 +40,9 @@ const SignupPage = () => {
   useEffect(() => {
     if (formData.college.length >= 3) {
       fetch(
-        `${process.env.REACT_APP_backend_url}/api/get/getCollege?college=${formData.college}`,
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/get/getCollege?college=${formData.college}`,
         {
           method: "GET",
           headers: {
@@ -68,11 +70,16 @@ const SignupPage = () => {
     e.preventDefault();
     try {
       console.log("Submitting form data ", IsSubmitting);
-      fetch(`${process.env.REACT_APP_backend_url}/api/users/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      }).then((response) => {
+      fetch(
+        `${
+          process.env.REACT_APP_backend_url || "http://localhost:5000"
+        }/api/auth/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      ).then((response) => {
         var dataR;
         response.json().then((data) => {
           dataR = data;

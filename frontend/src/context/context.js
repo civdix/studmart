@@ -14,7 +14,9 @@ export const AuthProvider = ({ children }) => {
   // Load user on first render if token is present
   const getImage = async (thing) => {
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/s3/getImage`,
       {
         method: "POST", // changed to POST
         headers: {
@@ -44,12 +46,17 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    fetch(`${process.env.REACT_APP_backend_url}/api/users/profile/me`, {
-      headers: {
-        studenttoken: token,
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/users/profile/me`,
+      {
+        headers: {
+          studenttoken: token,
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((response) => {
         if (response.success) {
@@ -91,7 +98,9 @@ export const AuthProvider = ({ children }) => {
       customLoading: "The Item will be permanently deleted",
     });
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/products/${productId}`,
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/products/${productId}`,
       {
         method: "DELETE",
         headers: {
@@ -115,7 +124,9 @@ export const AuthProvider = ({ children }) => {
     });
     console.log("User data to update", updatingData);
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/users/profile`,
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/users/profile`,
       {
         method: "PATCH",
         headers: {
