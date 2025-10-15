@@ -52,7 +52,9 @@ router.get("/getMyListing", auth, async (req, res) => {
     await Promise.all(
       products.map(async (product) => {
         const response = await fetch(
-          `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
+          `${
+            process.env.REACT_APP_backend_url || "http://localhost:5000"
+          }/api/s3/getImage/`,
           {
             method: "POST", // changed to POST
             headers: {
@@ -122,7 +124,9 @@ router.get("/", async (req, res) => {
     await Promise.all(
       products.map(async (product) => {
         const response = await fetch(
-          `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
+          `${
+            process.env.REACT_APP_backend_url || "http://localhost:5000"
+          }/api/s3/getImage/`,
           {
             method: "POST", // changed to POST
             headers: {
@@ -172,7 +176,9 @@ router.get("/:id", async (req, res) => {
     //   // Nothing to do
     // } else {
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/getImage/`,
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/s3/getImage/`,
       {
         method: "POST",
         headers: {
@@ -249,7 +255,9 @@ router.delete("/:id", auth, async (req, res) => {
   try {
     // Implelement S3 delete image API here
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/deleteImage/${req.params.id}`,
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/s3/deleteImage/${req.params.id}`,
       {
         method: "DELETE",
         headers: {

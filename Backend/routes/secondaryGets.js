@@ -4,6 +4,9 @@ const fs = require("fs");
 const path = require("path");
 
 // Test endpoint
+router.get("/health", (req, res) => {
+  res.json({ status: "API is healthy" });
+});
 router.get("/test", (req, res) => {
   res.json({ message: "API is working!" });
 });

@@ -5,16 +5,21 @@ const auth = require("../middlewares/auth");
 const dotenv = require("dotenv");
 dotenv.config();
 const getImage = async (thing) => {
-  const response = await fetch(`${process.env.REACT_APP_backend_url}/api/s3/getImage/`, {
-    method: "POST", // changed to POST
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      imageUrls: [thing.profilePicture] || [thing.images],
-      userId: thing.id,
-    }),
-  });
+  const response = await fetch(
+    `${
+      process.env.REACT_APP_backend_url || "http://localhost:5000"
+    }/api/s3/getImage/`,
+    {
+      method: "POST", // changed to POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageUrls: [thing.profilePicture] || [thing.images],
+        userId: thing.id,
+      }),
+    }
+  );
 
   const { success, imageUrl } = await response.json();
   if (success) {
@@ -87,38 +92,88 @@ router.get("/unread/count", auth, async (req, res) => {
 });
 
 // Get all conversations
+// Get all conversations
 router.get("/conversations", auth, async (req, res) => {
   try {
     const conversations = await Message.aggregate([
+      // Only include conversations where current user is sender or recipient
       {
         $match: {
           $or: [{ sender: req.user._id }, { recipient: req.user._id }],
         },
       },
+      // Normalize fields (convert to ObjectId properly)
+      {
+        $addFields: {
+          productObjId: {
+            $convert: {
+              input: "$product",
+              to: "objectId",
+              onError: null,
+              onNull: null,
+            },
+          },
+          senderObjId: {
+            $convert: {
+              input: "$sender",
+              to: "objectId",
+              onError: null,
+              onNull: null,
+            },
+          },
+          recipientObjId: {
+            $convert: {
+              input: "$recipient",
+              to: "objectId",
+              onError: null,
+              onNull: null,
+            },
+          },
+        },
+      },
+      // Exclude messages without valid product ID
+      {
+        $match: {
+          productObjId: { $ne: null },
+        },
+      },
+      // Group by product + other user
       {
         $group: {
           _id: {
-            product: "$product",
+            product: "$productObjId",
             otherUser: {
               $cond: {
-                if: { $eq: ["$sender", req.user._id] },
-                then: "$recipient",
-                else: "$sender",
+                if: { $eq: ["$senderObjId", req.user._id] },
+                then: "$recipientObjId",
+                else: "$senderObjId",
               },
             },
           },
           lastMessage: { $last: "$$ROOT" },
         },
       },
+      // Convert otherUser to proper ObjectId for lookup
+      {
+        $addFields: {
+          otherUserObjId: {
+            $convert: {
+              input: "$_id.otherUser",
+              to: "objectId",
+              onError: null,
+              onNull: null,
+            },
+          },
+        },
+      },
       {
         $lookup: {
-          from: "users",
-          localField: "_id.otherUser",
+          from: "students",
+          localField: "otherUserObjId",
           foreignField: "_id",
           as: "otherUser",
         },
       },
-
       {
         $lookup: {
           from: "products",
@@ -132,34 +187,39 @@ router.get("/conversations", auth, async (req, res) => {
       },
     ]);
 
+    // Enrich with profile pictures
     Promise.all(
       conversations.map((conv) => {
+        // If no user found, skip silently
+        if (!conv.otherUser || conv.otherUser.length === 0) {
+          conv.otherUser = { profilePicture: null };
+          return conv;
+        }
+
         return getImage({
-          profilePicture: conv.otherUser[0].profilePicture,
-          id: conv.otherUser[0]._id,
+          profilePicture: conv.otherUser.profilePicture,
+          id: conv.otherUser._id,
         })
           .then((result) => {
-            conv.otherUser[0].profilePicture =
-              result.images[0] ||
+            conv.otherUser.profilePicture =
+              result.images?.[0] ||
               "https://i.pinimg.com/736x/5d/02/f7/5d02f7a385be2e52c836bd25192029dd.jpg";
             return conv;
           })
-          .catch((err) => {
-            console.error("Error fetching image:", err);
-            conv.otherUser[0].profilePicture =
+          .catch(() => {
+            conv.otherUser.profilePicture =
               "https://i.pinimg.com/736x/5d/02/f7/5d02f7a385be2e52c836bd25192029dd.jpg";
             return conv;
           });
       })
     )
       .then((updatedConversations) => {
-        res.json(updatedConversations); // ✅ respond to frontend here
+        res.json(updatedConversations);
       })
       .catch((err) => {
         console.error("Error in Promise.all:", err);
         res.status(500).json({ error: "Internal server error" });
       });
-    // res.json(conversations);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

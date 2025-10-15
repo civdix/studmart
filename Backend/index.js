@@ -9,14 +9,14 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/users", require("./routes/user"));
 app.use("/api/auth", require("./routes/auth.js"));
 app.use("/api/s3", require("./routes/AWSS3"));
 app.use("/api/products", require("./routes/product.js"));
-app.use("/api/messages", require("./routes/message"));
+app.use("/api/messages", require("./routes/message.js"));
 app.use("/api/transactions", require("./routes/transaction"));
 app.use("/api/get", require("./routes/secondaryGets"));
 
@@ -28,9 +28,7 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB
 mongoose
-  .connect(
-    "mongodb+srv://Shivam:Studmart123Password@cluster0.oq61s6a.mongodb.net/studmart?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/StudMart")
   .then(() => {
     console.log("Connected to MongoDB");
     // Start server

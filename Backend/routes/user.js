@@ -96,7 +96,9 @@ router.get("/profile/me", auth, getSignedImages, async (req, res) => {
   // Recieving right Object Id
   if (!req.imageUrlFromRedisMiddleware) {
     const response = await fetch(
-      `${process.env.REACT_APP_backend_url}/api/s3/getImage`,
+      `${
+        process.env.REACT_APP_backend_url || "http://localhost:5000"
+      }/api/s3/getImage`,
       {
         method: "POST", // changed to POST
         headers: {
