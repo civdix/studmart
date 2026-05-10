@@ -1,8 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
 const serverless = require("serverless-http");
+
 require("dotenv").config();
 
 const app = express();
@@ -10,43 +10,86 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
-app.use("/api/users", require("../routes/user.js"));
-app.use("/api/s3", require("../routes/AWSS3"));
-app.use("/api/products", require("../routes/product.js"));
-app.use("/api/messages", require("../routes/message"));
-app.use("/api/transactions", require("../routes/transaction"));
-app.use("/api/get", require("../routes/secondaryGets"));
-app.use("/api/test", (req, res) => {
-  res.send("Server is working");
-});
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
-});
+let cached = global.mongoose;
 
-// MongoDB connection (only connect once)
-let isConnected;
-async function connectToDatabase() {
-  if (isConnected) return;
-  try {
-    const db = await mongoose.connect(process.env.MONGODB_URI);
-    isConnected = db.connections[0].readyState;
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
-  }
+if (!cached) {
+  cached = global.mongoose = {
+    conn: null,
+    promise: null,
+  };
 }
 
-// Ensure DB is connected before handling any route
-app.use(async (req, res, next) => {
-  await connectToDatabase();
-  next();
-});
+async function connectToDatabase() {
+  // Return existing connection
+  if (cached.conn) {
+    return cached.conn;
+  }
 
-// Export the app as a serverless handler
-module.exports = app;
-module.exports.handler = serverless(app);
+  // Create new connection promise if not exists
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(process.env.MONGODB_URI, {
+        bufferCommands: false,
+      })
+      .then((mongooseInstance) => {
+        console.log("====================================");
+        console.log("MongoDB Connected Successfully");
+        console.log("====================================");
+
+        return mongooseInstance;
+      })
+      .catch((err) => {
+        console.error("MongoDB Connection Error:", err);
+        throw err;
+      });
+  }
+
+  cached.conn = await cached.promise;
+
+  return cached.conn;
+}
+
+
+let isAppInitialized = false;
+
+async function initializeApp() {
+  if (isAppInitialized) return;
+
+  // Connect DB FIRST
+  await connectToDatabase();
+
+  // Routes AFTER DB connection
+  app.use("/api/users", require("../routes/user.js"));
+  app.use("/api/auth", require("../routes/auth.js"));
+  app.use("/api/s3", require("../routes/AWSS3"));
+  app.use("/api/products", require("../routes/product.js"));
+  app.use("/api/messages", require("../routes/message"));
+  app.use("/api/transactions", require("../routes/transaction"));
+  app.use("/api/get", require("../routes/secondaryGets"));
+
+  // Test Route
+  app.use("/api/test", (req, res) => {
+    res.send("Server is working");
+  });
+
+  // Error Handling Middleware
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+
+    res.status(500).json({
+      success: false,
+      error: "Something went wrong!",
+    });
+  });
+
+  isAppInitialized = true;
+}
+
+
+const handler = serverless(app);
+
+module.exports.handler = async (req, res) => {
+  await initializeApp();
+  return handler(req, res);
+};

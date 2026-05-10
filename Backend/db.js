@@ -21,7 +21,6 @@ const connectToMongo = async () => {
     console.log("====================================");
     console.log("Database Connected Successfully");
     console.log("====================================");
-
   } catch (e) {
     console.log("====================================");
     console.log("MongoDB Connection Failed");
@@ -39,7 +38,6 @@ const disconnectToMongo = async () => {
     console.log("====================================");
     console.log("Database Disconnected Successfully");
     console.log("====================================");
-
   } catch (e) {
     console.log("====================================");
     console.log("Database Disconnection Failed");
