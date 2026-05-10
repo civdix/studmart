@@ -1,15 +1,23 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
+const serverless = require("serverless-http");
+const {connectToDatabase} = require("./db.js")
 require("dotenv").config();
 
 const app = express();
 
+mongoose.set("bufferCommands", false);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// CONNECT DB BEFORE ROUTES
+app.use(async (req, res, next) => {
+  await connectToDatabase();
+  next();
+});
 
 // Routes
 app.use("/api/users", require("./routes/user"));
@@ -26,17 +34,17 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Something went wrong!" });
 });
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/StudMart")
-  .then(() => {
-    console.log("Connected to MongoDB");
-    // Start server
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
-  });
+// // Connect to MongoDB
+// mongoose
+//   .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/StudMart")
+//   .then(() => {
+//     console.log("Connected to MongoDB");
+//     // Start server
+//     const PORT = process.env.PORT || 5000;
+//     app.listen(PORT, () => {
+//       console.log(`Server is running on port ${PORT}`);
+//     });
+//   })
+//   .catch((error) => {
+//     console.error("MongoDB connection error:", error);
+//   });
