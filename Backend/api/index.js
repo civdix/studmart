@@ -32,8 +32,14 @@ async function connectToDatabase() {
   }
 
   if (!cached.promise) {
+    // Clean up the URI just in case it was pasted into Vercel with quotes or spaces
+    let uri = process.env.MONGODB_URI || "";
+    uri = uri.replace(/^["']|["']$/g, '').trim();
+
+    console.log("Attempting MongoDB Connection...");
+    
     cached.promise = mongoose
-      .connect(process.env.MONGODB_URI, {
+      .connect(uri, {
         bufferCommands: false,
       })
       .then((mongooseInstance) => {
