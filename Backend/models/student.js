@@ -49,5 +49,4 @@ const StudentSchema = new Schema({
 });
 
 const Student = model("students", StudentSchema);
-Student.createIndexes();
 module.exports = Student;
